@@ -1,7 +1,7 @@
 export const ROUTES = {
 	Home: '/',
-	Otc:{
-		Home:'/otc'
+	Market:{
+		Home:'/market'
 	},
 	Exchange:{
 		Home:'/exchange'
@@ -11,7 +11,7 @@ export const ROUTES = {
 	},
 
 	Staking: {
-		Home: '/otc',
+		Home: '/market',
 		Burn: '/staking/burn',
 		Mint: '/staking/mint',
 	},

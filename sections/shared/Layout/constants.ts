@@ -16,7 +16,7 @@ export type MenuLinks = MenuLink[];
 export const MENU_LINKS: MenuLinks = [
 	{
 		i18nLabel: 'sidenav.market',
-		link: ROUTES.Staking.Home,
+		link: ROUTES.Market.Home,
 	},
 	{
 		i18nLabel: 'sidenav.pendingOrder',
