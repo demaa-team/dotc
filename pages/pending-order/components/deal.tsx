@@ -2,52 +2,52 @@ import styled from 'styled-components';
 const Deal = () => {
     return (
         <Container>
-            <ContainerTop>
-                <div>
-                    <span>ID</span>
-                    <span>&nbsp;&nbsp;123</span>
-                </div>
-                <div>编辑 删除</div>
-            </ContainerTop>
-            <ContainerFixed>
-                <div className='containerFixedLeft'>
-                    <div>
-                        化名 <input className='longInput'></input>
-                    </div>
-                    <div>
-                        广告 <input className='longInput'></input>
-                    </div>
-                    <div>
-                        价格 <select name="" id="">
-                        <option value="">CNY</option></select> <input ></input>
-                    </div>
-                    <div>
-                        商品 <select name="" id="">
-                        <option value="">USDT</option></select> <input ></input>
-                    </div>
-                </div>
-                <div className='containerFixedRight'>
-                    <div className='headPortrait'>
-                        <div>头像</div>
+              <ContainerTop>
+                  <div>
+                      <span>ID</span>
+                      <span>&nbsp;&nbsp;123</span>
+                  </div>
+                  <div>编辑 删除</div>
+              </ContainerTop>
+              <ContainerFixed>
+                  <div className='containerFixedLeft'>
+                      <div>
+                      化名 <input className='longInput'></input>
+                      </div>
+                      <div>
+                      广告 <input className='longInput'></input>
+                      </div>
+                      <div>
+                      价格 <select name="" id="">
+                          <option value="">CNY</option></select> <input ></input>
+                      </div>
+                      <div>
+                      商品 <select name="" id="">
+                      <option value="">USDT</option></select> <input ></input>
+                      </div>
+                  </div>
+                  <div className='containerFixedRight'>
+                      <div className='headPortrait'>
+                          <div>头像</div>
                         <button>上传头像</button>
-                    </div>
-                    <button className='confirmTransfer'>批准系统转账</button>
-                </div>
-            </ContainerFixed>
-            <ContainerDynamic>
+                      </div>
+                      <button className='confirmTransfer'>批准系统转账</button>
+                  </div>
+              </ContainerFixed>
+              <ContainerDynamic>
                 <div className='dynamicWay'>联系方式</div>
                 <div className='dynamicForm'>
                     <div className='dynamicWayItem'>
                         <select name="" id="">
                             <option value="">电话号码</option>
-                        </select>
+                        </select> 
                         <input ></input>
                         <button>-</button>
                     </div>
                     <div className='dynamicWayItem'>
                         <select name="" id="">
                             <option value="">微信</option>
-                        </select>
+                        </select> 
                         <input ></input>
                         <button>-</button>
                     </div>
@@ -55,21 +55,21 @@ const Deal = () => {
                         <button className='dynamicWayItemAdd'>+</button>
                     </div>
                 </div>
-            </ContainerDynamic>
-            <ContainerDynamic>
-                <div className='dynamicWay'>支付方式</div>
-                <div className='dynamicForm'>
+              </ContainerDynamic>
+              <ContainerDynamic>
+              <div className='dynamicWay'>支付方式</div>
+              <div className='dynamicForm'>
                     <div className='dynamicWayItem'>
                         <select name="" id="">
                             <option value="">银行卡</option>
-                        </select>
+                        </select> 
                         <input ></input>
                         <button>-</button>
                     </div>
                     <div className='dynamicWayItem'>
                         <select name="" id="">
                             <option value="">支付宝</option>
-                        </select>
+                        </select> 
                         <input ></input>
                         <button>-</button>
                     </div>
@@ -77,10 +77,10 @@ const Deal = () => {
                         <button className='dynamicWayItemAdd'>+</button>
                     </div>
                 </div>
-            </ContainerDynamic>
-            <Footer>
+              </ContainerDynamic>
+              <Footer>
                 <button>开单</button>
-            </Footer>
+              </Footer>
         </Container>
     )
 }
