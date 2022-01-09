@@ -2,6 +2,8 @@ import { FC, useEffect } from 'react';
 import Head from 'next/head';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import Deal from './components/deal';
+import NoWallet from './components/noWallet';
 
 import UIContainer from 'containers/UI';
 
@@ -19,8 +21,8 @@ const PendingOrder: FC = () => {
 			<Head>
 				<title>{t('escrow.page-title')}</title>
 			</Head>
-			<div>pending-order content</div>
-			
+			{/* <NoWallet /> */}
+			<Deal />
 		</>
 	);
 };
