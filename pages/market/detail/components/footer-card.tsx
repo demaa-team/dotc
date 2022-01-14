@@ -46,7 +46,7 @@ const Container=styled.div`
     border-radius: 22px;
     display: flex;
     justify-content: space-between;
-    padding: 0 200px;
+    padding: 0 15vw;
     margin-top: 27px;
     .itemBox{
         display: flex;

@@ -127,6 +127,7 @@ const LeftBox=styled.div`
 
 const RightBox=styled.div`
 	flex: 1;
+	margin-left: 26px;
 `
 const SubmitBtn=styled.div`
 	width: 740px;
