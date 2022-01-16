@@ -9,7 +9,8 @@ import Table from './components/table';
 import TableCom from './components/tableCom'
 
 import UIContainer from 'containers/UI';
-import Select from './components/select';
+// import Select from './components/select';
+import Select from 'components/Select';
 import Currency from 'components/Currency';
 import { useRouter } from 'next/router';
 
@@ -178,6 +179,11 @@ const Exchange: FC = () => {
 		{ label: 'usd', value: '2' },
 		{ label: 'otc', value: '3' },
 	]
+	const colourOptions=[
+        { value: 'chocolate', label: 'Chocolate' },
+        { value: 'strawberry', label: 'Strawberry' },
+        { value: 'vanilla', label: 'Vanilla' }
+    ]
 	const value = '1'
 	return (
 		<>
@@ -206,23 +212,27 @@ const Exchange: FC = () => {
 						/> */}
 						<Select
 							variant="outline"
+							options={colourOptions}
 						/>
 					</SelectInput>
 
 					<SelectInput data-testid="select">
 						<Select
 							variant="outline"
+							options={colourOptions}
 						/>
 					</SelectInput>
 
 					<SelectInput data-testid="select">
 						<Select
 							variant="outline"
+							options={colourOptions}
 						/>
 					</SelectInput>
 					<SelectInput data-testid="select">
 						<Select
 							variant="outline"
+							options={colourOptions}
 						/>
 					</SelectInput>
 				</SelectWrap>

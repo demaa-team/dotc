@@ -2,6 +2,13 @@
 	"languages": {
 		"en": "English"
 	},
+	"pending-order":{
+		"page-title": "DEMAA | Pending Order"
+	},
+	"market":{
+		"page-title": "DEMAA | Market"
+	},
+
 
 	
 

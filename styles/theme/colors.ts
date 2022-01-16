@@ -66,4 +66,7 @@ export default {
 	rinkeby: '#F6C343',
 	goerli: 'rgb(48, 153, 242)',
 	noNetwork: 'rgb(155, 155, 155)',
+
+	//input bg
+	inputBg:'#192987',
 };

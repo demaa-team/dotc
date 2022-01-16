@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import styled from 'styled-components';
 import { Svg } from 'react-optimized-image';
 import { useTranslation } from 'react-i18next';
@@ -11,11 +11,27 @@ import { DesktopOnlyView, MobileOrTabletView } from 'components/Media';
 import BannerManager from 'components/BannerManager';
 import TitleIcon from 'assets/svg/app/menu-hamburger-white.svg';
 import UserMenu from './UserMenu';
+import { useRouter } from 'next/router';
 
 const Header: FC = () => {
+	const router = useRouter();
 	const { t } = useTranslation();
 	const { showMobileSideNav, headerTitle, headerSubtitle } = UIContainer.useContainer();
-
+	const getRouterPath = useMemo(
+		() => {
+			if(router.asPath){
+				const arr=router.asPath.split('/');
+				if(arr.length>=4){
+					return arr[1]+'/'+arr[arr.length-1];
+				}else{
+					return false;
+				}
+			}else{
+				return false;
+			}
+		},
+		[router.asPath]
+	);
 	return (
 		<HeaderWrapper>
 			<DesktopOnlyView>
@@ -23,7 +39,7 @@ const Header: FC = () => {
 			</DesktopOnlyView>
 			<Container>
 				<FlexDivCentered>
-					<MobileOrTabletView>
+					{/* <MobileOrTabletView>
 						<Title onClick={showMobileSideNav}>
 							<Svg src={TitleIcon} />
 							{!headerTitle ? null : (
@@ -36,7 +52,11 @@ const Header: FC = () => {
 								</>
 							)}
 						</Title>
-					</MobileOrTabletView>
+					</MobileOrTabletView> */}
+					{
+						getRouterPath&&
+						<PageRouterShow>{getRouterPath}</PageRouterShow>
+					}
 					<Sep />
 					<UserMenu />
 				</FlexDivCentered>
@@ -87,5 +107,9 @@ const SubtitleText = styled.div`
 const Sep = styled.div`
 	flex: 1;
 `;
+
+const PageRouterShow=styled.div`
+	padding-left: 316px;
+`
 
 export default Header;

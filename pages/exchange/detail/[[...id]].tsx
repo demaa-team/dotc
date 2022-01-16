@@ -133,6 +133,7 @@ const Detail = () => {
 const Container = styled.div`
 	padding: 26px;
 	display: grid;
+    justify-content: center;
     grid-template-columns: repeat(auto-fill, 760px);
     grid-column-gap: 26px;
     grid-row-gap: 22px;

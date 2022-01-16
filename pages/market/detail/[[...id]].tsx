@@ -130,7 +130,7 @@ const RightBox=styled.div`
 	margin-left: 26px;
 `
 const SubmitBtn=styled.div`
-	width: 740px;
+	width: 54vw;
 	height: 54px;
 	line-height: 54px;
 	text-align: center;

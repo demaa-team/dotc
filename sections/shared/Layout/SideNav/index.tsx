@@ -6,12 +6,13 @@ import MobileSideNav from './MobileSideNav';
 const SideNav: FC = () => {
 	return (
 		<div>
-			<DesktopOnlyView>
+			<DesktopSideNav />
+			{/* <DesktopOnlyView>
 				<DesktopSideNav />
 			</DesktopOnlyView>
 			<MobileOrTabletView>
 				<MobileSideNav />
-			</MobileOrTabletView>
+			</MobileOrTabletView> */}
 		</div>
 	);
 };

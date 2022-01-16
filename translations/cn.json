@@ -2,6 +2,16 @@
 	"languages": {
 		"cn": "中文"
 	},
+	"pending-order":{
+		"page-title": "DEMAA | 挂单"
+	},
+	"market":{
+		"page-title": "DEMAA | 市场"
+	},
+
+
+
+
 	"meta": {
 		"description": "A dApp for DEM holders to earn rewards through staking.",
 		"og": {

@@ -43,7 +43,11 @@ const Container=styled.div`
         align-items: center;
         justify-content: center; */
         .avatarWrap{
-            padding: 12px;
+            width: 147px;
+            height: 147px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border: 2px dotted #49C8BA;
             border-radius: 50%;
             .avatar{
@@ -71,7 +75,8 @@ const Container=styled.div`
     }
     .rightBox{
         display: flex;
-        flex-direction: column-reverse;
+        /* flex-direction: column-reverse; */
+        /* align-items: center; */
         .rbContent{
             width: 394px;
             height: 124px;
