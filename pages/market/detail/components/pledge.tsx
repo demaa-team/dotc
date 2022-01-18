@@ -1,17 +1,19 @@
 import React,{useEffect, useMemo,useState} from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import { useRouter } from 'next/router';
-import styled from 'styled-components';
+import styled,{css} from 'styled-components';
 import castArray from 'lodash/castArray';
 import HelpIcon from 'public/images/market/help-icon.png';
 import PriceCurrencySelect from 'sections/shared/modals/SettingsModal/PriceCurrencySelect';
 import BaseModal from 'components/BaseModal';
 import Input from 'components/Input/Input';
+import Img, { Svg } from 'react-optimized-image';
+import { Tooltip } from 'styles/common';
 
 let timer: number | null=null;
-const TIME=6;
-let time=6;
+const TIME=60;
+let time=60;
 const Pledge=()=>{
     const [showModal,setShowModal]=useState(false);
     const [countDown,setCountDown]=useState(TIME);
@@ -42,12 +44,23 @@ const Pledge=()=>{
     return (
         <Container>
             <div className="maxBox">
+                <div className="minBtn">最小</div>
                 <div className="val">1000</div>
                 <div className="maxBtn">最大</div>
             </div>
             <div className="loan">
                 <div className="help">
-                    <img className='questionIcon' src={HelpIcon} alt="" />
+                    <PledgeInfoTooltip
+                        arrow={true}
+                        content={
+                            <Trans
+                                i18nKey="debt.actions.hedge.info.tooltip"
+                                components={[<Strong />]}
+                            ></Trans>
+                        }
+                    >
+                        <Img className='questionIcon' src={HelpIcon}/>
+                    </PledgeInfoTooltip>
                     <div className="txt">抵押:</div>
                 </div>
                 <div className="selectBox">
@@ -128,8 +141,18 @@ const GetVerifyCodeBtn=styled.div<{isForbid:boolean}>`
     cursor: ${(props)=>props.isForbid?'not-allowed':'pointer'};
 `
 
-
-
+// 最大和最小公共样式
+const maxAndMinCommon=css`
+    width: 150px;
+    height: 100%;
+    line-height: 60px;
+    text-align: center;
+    background: #5473E8;
+    font-size: 24px;
+    font-weight: bold;
+    color: #FFFFFF;
+    cursor: pointer;
+`
 const Container=styled.div`
     height: 306px;
     background: #203298;
@@ -149,20 +172,15 @@ const Container=styled.div`
             font-size: 20px;
             font-weight: 400;
             color: #FFFFFF;
-            border-top-left-radius: 10px;
-            border-bottom-left-radius: 10px;
         }
+
         .maxBtn{
-            /* flex: 1; */
-            width: 150px;
-            height: 100%;
-            line-height: 60px;
-            text-align: center;
-            background: #5473E8;
+            ${maxAndMinCommon}
             border-radius: 0px 10px 10px 0px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #FFFFFF;
+        }
+        .minBtn{
+            ${maxAndMinCommon}
+            border-radius: 10px 0px 0px 10px;
         }
     }
     .loan{
@@ -203,6 +221,7 @@ const Container=styled.div`
                 font-size: 24px;
                 font-weight: bold;
                 color: #FFFFFF;
+                cursor: pointer;
             }
         }
     }
@@ -229,7 +248,19 @@ const SelectComponent=styled.div`
     }
 `
 
+const PledgeInfoTooltip = styled(Tooltip)`
+	background: ${(props) => props.theme.colors.navy};
+	.tippy-arrow {
+		color: ${(props) => props.theme.colors.navy};
+	}
+	.tippy-content {
+		font-size: 14px;
+	}
+`;
 
+const Strong = styled.strong`
+	font-family: ${(props) => props.theme.fonts.interBold};
+`;
 
 
 export default Pledge;

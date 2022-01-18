@@ -188,7 +188,7 @@ const Exchange: FC = () => {
 	return (
 		<>
 			<Head>
-				<title>{t('earn.page-title')}</title>
+				<title>{t('exchange.page-title')}</title>
 			</Head>
 
 			<Container>

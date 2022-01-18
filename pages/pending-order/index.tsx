@@ -160,6 +160,7 @@ const PendingOrder: FC = () => {
 						<AvatarWrap>
 							<img className='avatar' src="http://m.imeitou.com/uploads/allimg/2016062920/ke4rrvvmx5g.jpg" alt=""/>
 						</AvatarWrap>
+						{/* @ts-ignore */}
 						<Upload {...UploadProps}>
 							<UploadAvatarBtn>上传头像</UploadAvatarBtn>
 						</Upload>

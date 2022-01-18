@@ -1,4 +1,4 @@
-import React,{useMemo} from 'react';
+import React,{useMemo, useState} from 'react';
 import Head from 'next/head';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
@@ -10,20 +10,15 @@ import castArray from 'lodash/castArray';
 // import ItemCard from './components/item-card';
 import DetailCard from '../components/detail-card';
 
-import AmountIcon from 'public/images/market/amount-icon.png';
-import RecordIcon from 'public/images/market/record-icon.png';
-import TicketIcon from 'public/images/market/ticket-icon.png';
-import ArrivalIcon from 'public/images/market/arrival-icon.png';
+import BaseModal from 'components/BaseModal';
+import Evidence from './components/evidence';
 
 
 const Detail = () => {
     const router = useRouter();
-	const marketQuery = useMemo(
-		() => (router.query.id ? castArray(router.query.id)[0] : null),
-		[router.query]
-	);
-    
 	const { t } = useTranslation();
+    const [arbitrationModal,setArbitrationModal]=useState(false);
+
 	const listData=[
         {
             key:'1',
@@ -110,7 +105,7 @@ const Detail = () => {
 	return (
 		<>
 			<Head>
-				<title>{t('staking.page-title')}</title>
+				<title>{t('exchange.detail.page-title')}</title>
 			</Head>
 			<Container>
                 {
@@ -123,9 +118,30 @@ const Detail = () => {
             <HandleBtnGroup>
                 <div className="btn">确认</div>
                 <div className="btn">取消</div>
-                <div className="btn">申请仲裁</div>
+                <div className="btn" onClick={()=>setArbitrationModal(true)}>申请仲裁</div>
                 <div className="btn">辩护</div> 
             </HandleBtnGroup>
+
+            <StyledBaseModal isOpen={arbitrationModal} onDismiss={()=>setArbitrationModal(false)}>
+                <ModalWrap>
+                    <MTitile>申请仲裁</MTitile>
+                    <MDesc>
+                        证据需为交易生成时间开始3天以上的转账记录或1天以上的收款记录，最多可提交4张交易
+                        记录截图。证据图片需清晰，时间连续，无PS修改。系统将自动使用图片检测工具对证据是
+                        否存在修改情况作出判断，一旦发现图片有修改痕迹，仲裁将该证据提供者判定为作恶者，
+                        并执行最终仲裁。
+                    </MDesc>
+                    <EvidenceList>
+                        {
+                            [1,2,3,4].map(v=>
+                                <Evidence key={v}></Evidence>
+                            )
+                        }
+                    </EvidenceList>
+                    <SubmitBtn>提交</SubmitBtn>
+                </ModalWrap>
+            </StyledBaseModal>
+
 		</>
 	);
 };
@@ -158,6 +174,50 @@ const HandleBtnGroup=styled.div`
             background: #F86C29;
         }
     }
+`
+
+const ModalWrap=styled.div`
+    /* padding: 16px 25px 33px; */
+`
+const MTitile=styled.div`
+    font-size: 22px;
+    font-weight: bold;
+    color: #FFFFFF;
+    text-align: left;
+`
+const MDesc=styled.div`
+    font-size: 18px;
+    font-weight: 400;
+    color: #FFFFFF;
+    line-height: 29px;
+    margin-top: 54px;
+    padding: 0 35px;
+`
+const EvidenceList=styled.div`
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    justify-content: center;
+    grid-column-gap: 40px;
+`
+
+const StyledBaseModal = styled(BaseModal)`
+	[data-reach-dialog-content] {
+		width: 910px;
+	}
+`;
+
+const SubmitBtn=styled.div`
+    margin: 30px auto 0;
+    width: 476px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    background: #F86C29;
+    border-radius: 11px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #FFFFFF;
 `
 
 export default Detail;

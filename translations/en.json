@@ -3,10 +3,19 @@
 		"en": "English"
 	},
 	"pending-order":{
-		"page-title": "DEMAA | Pending Order"
+		"page-title": "DOTC | Pending Order"
 	},
 	"market":{
-		"page-title": "DEMAA | Market"
+		"page-title": "DOTC | Market",
+		"detail":{
+			"page-title": "MARKET | Detail"
+		}
+	},
+	"exchange":{
+		"page-title": "DOTC | Exchange",
+		"detail":{
+			"page-title": "EXCHANGE | Detail"
+		}
 	},
 
 

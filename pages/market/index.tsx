@@ -6,8 +6,7 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import WeiXinImg from 'public/images/market/weixin.png';
 import PayPalImg from 'public/images/market/paypal.png';
-import ArrowRightImg from 'public/images/market/arrow-right.png';
-import ArrowRightHoverImg from 'public/images/market/arrow-right-hover.png';
+import Img, { Svg } from 'react-optimized-image';
 
 const Market = () => {
 	const router = useRouter();
@@ -68,8 +67,8 @@ const Market = () => {
 								<div className="row">
 									<div className="label">支付</div>
 									<div className="payType">
-										<img className='payImg' src={WeiXinImg} alt="" srcset="" />
-										<img className='payImg' src={PayPalImg} alt="" srcset="" />
+										<Img className='payImg' src={WeiXinImg}/>
+										<Img className='payImg' src={PayPalImg}/>
 									</div>
 								</div>
 								<JumpBtn className='jumpBtn' onClick={handleJumpDetail}/>

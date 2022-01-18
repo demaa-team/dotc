@@ -88,7 +88,7 @@ const Detail = () => {
 	return (
 		<>
 			<Head>
-				<title>{t('staking.page-title')}</title>
+				<title>{t('market.detail.page-title')}</title>
 			</Head>
 			<Container>
 				<LeftBox>
@@ -140,6 +140,7 @@ const SubmitBtn=styled.div`
 	font-weight: bold;
 	color: #FFFFFF;
 	margin: auto;
+	cursor: pointer;
 `
 
 export default Detail;

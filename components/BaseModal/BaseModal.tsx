@@ -11,7 +11,7 @@ import { zIndex } from 'constants/ui';
 import media from 'styles/media';
 
 type BaseModalProps = {
-	title: ReactNode;
+	title?: ReactNode;
 	isOpen?: boolean;
 	onDismiss: ()=>void;
 	children: ReactNode;
