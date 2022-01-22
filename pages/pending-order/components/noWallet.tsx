@@ -2,7 +2,7 @@ import styled from 'styled-components';
 const NoWallet = () => {
     return (
         <Container>
-            <div>链接钱包</div>
+                <div>链接钱包</div>
         </Container>
     )
 }
