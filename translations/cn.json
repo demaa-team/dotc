@@ -1473,8 +1473,8 @@
 	},
 	"sidenav": {
 		"market":"市场",
-		"pendingOrder":"挂单",
-		"exchange":"交易",
+		"order":"挂单",
+		"deal":"交易",
 
 
 		

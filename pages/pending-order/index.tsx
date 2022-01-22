@@ -67,7 +67,7 @@ const PendingOrder: FC = () => {
 		if(type==='pay'){
 			if(payList.length===1)return;
 			payList.splice(idx,1);
-			setPayList([...contactList]);
+			setPayList([...payList]);
 			return;
 		}
 		
@@ -180,7 +180,7 @@ const PendingOrder: FC = () => {
 						label="支付方式" 
 						list={payList}
 						onAdd={()=>handleAdd('pay')}
-						onRemove={(i)=>handleRemove(i,'contact')}
+						onRemove={(i)=>handleRemove(i,'pay')}
 						onInputChange={(v,i)=>handleInputChange(v,i,'pay')}
 						onSelectChange={(v,i)=>handleOnSelectChange(v,i,'pay')}
 					></ContactType>

@@ -99,13 +99,14 @@ const FooterCard=()=>{
                         arrow={true}
                         placement="bottom"
                         content={
-                            wxPayCopied ? t('modals.wallet.copy-address.copied')
-                                : t('modals.wallet.copy-address.copy-to-clipboard')
+                            // wxPayCopied ? t('modals.wallet.copy-address.copied')
+                            //     : t('modals.wallet.copy-address.copy-to-clipboard')
+                            t('modals.wallet.copy-address.copy-to-clipboard')
                         }
                     >
                         <CopyClipboardContainer>
-                            <CopyToClipboard text={'+8612345678'} onCopy={() => setWxPayCopied(true)}>
-                                {wxPayCopied ? (
+                            <CopyToClipboard text={'+86123456789'} onCopy={() => setWxPayCopied(true)}>
+                                {/* {wxPayCopied ? (
                                     <Svg
                                         src={CheckIcon}
                                         width="16"
@@ -114,7 +115,8 @@ const FooterCard=()=>{
                                     />
                                 ) : (
                                     <Svg src={CopyIcon} />
-                                )}
+                                )} */}
+                                <Svg src={CopyIcon} />
                             </CopyToClipboard>
                         </CopyClipboardContainer>
                     </Tooltip>

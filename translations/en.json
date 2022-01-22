@@ -1317,8 +1317,8 @@
 	},
 	"sidenav": {
 		"market":"market",
-		"pendingOrder":"pending Order",
-		"exchange":"exchange",
+		"order":"order",
+		"deal":"deal",
 
 
 		

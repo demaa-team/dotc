@@ -19,11 +19,11 @@ export const MENU_LINKS: MenuLinks = [
 		link: ROUTES.Market.Home,
 	},
 	{
-		i18nLabel: 'sidenav.pendingOrder',
+		i18nLabel: 'sidenav.order',
 		link: ROUTES.PendingOrder.Home,
 	},
 	{
-		i18nLabel: 'sidenav.exchange',
+		i18nLabel: 'sidenav.deal',
 		link: ROUTES.Exchange.Home,
 	},
 ];

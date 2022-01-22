@@ -188,11 +188,11 @@ const Container=styled.div`
         height: 60px;
         margin-top: 34px;
         .help{
-            width: 186px;
+            width: 120px;
             height: 100%;
             display: flex;
             align-items: center;
-            background: #1A2479;
+            /* background: #1A2479; */
             border-radius: 10px;
             padding: 0 16px;
             .questionIcon{

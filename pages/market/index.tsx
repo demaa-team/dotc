@@ -96,21 +96,34 @@ const Container = styled.div`
 const ItemCard= styled.div`
 	/* width: 440px;
 	height: 680px; */
-	border: 2px solid #1F54A5;
+	/* border: 2px solid #1F54A5; */
 	/* border-image: linear-gradient(0deg, #5AD3C5, #1CB6CC) 10 10; */
 	/* background: linear-gradient(0deg, rgba(90, 211, 197,0.26) 0%, rgb(28, 182, 204,0.26) 99%); */
 	background: #203298;
-	border-radius: 10px;
+	/* border-radius: 10px; */
 	padding: 30px 20px;
 	/* margin: 35px; */
 	box-shadow: 0px 0px 20px rgb(0 0 0 / 20%);
+	position: relative;
 	&:hover{
-		border-color: #1EB7CC;
+		/* border-color: #1EB7CC; */
 		background: #2839C1;
 		box-shadow: 0 0 28px -12px #000;
 		.jumpBtn{
 			background-image: url('/images/market/arrow-right-hover.png');
 		}
+		&::before{
+			background: #F86C29;
+		}
+	}
+	&::before{
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 4px;
+    	height: 466px;
+		background: #5C6CF2;
 	}
 `;
 
