@@ -1,4 +1,4 @@
-import React,{useMemo} from 'react';
+import React,{useMemo,useState} from 'react';
 import Head from 'next/head';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
@@ -9,6 +9,7 @@ import Personal from './components/personal';
 import Pledge from './components/pledge';
 import ItemCard from './components/item-card';
 import FooterCard from './components/footer-card';
+import Button from 'components/Button';
 
 import AmountIcon from 'public/images/market/amount-icon.png';
 import RecordIcon from 'public/images/market/record-icon.png';
@@ -23,7 +24,7 @@ const Detail = () => {
 		[router.query]
 	);
 	const { t } = useTranslation();
-	const listData=[
+	const demoData=[
 		{
 			icon:AmountIcon,
 			list:[
@@ -85,6 +86,13 @@ const Detail = () => {
 			]
 		}
 	]
+	const [listData,setListData]=useState(demoData);
+	const pledgeSelect=(v:any)=>{
+		const l = JSON.parse(JSON.stringify(listData))
+		l[3].list[0].val = String(Math.floor(Math.random() * 1000) + 1)
+		setListData(l)
+	}
+	
 	return (
 		<>
 			<Head>
@@ -94,7 +102,7 @@ const Detail = () => {
 				<LeftBox>
 					<Personal></Personal>
 					<PledgeWrap>
-						<Pledge></Pledge>
+						<Pledge onSelectChange={pledgeSelect}></Pledge>
 					</PledgeWrap>
 				</LeftBox>
 				<RightBox>
@@ -105,7 +113,11 @@ const Detail = () => {
 					}
 				</RightBox>
 			</Container>
-			<SubmitBtn>提交</SubmitBtn>
+			<BtnBox>
+				<Button variant="primary">
+					<SubmitTxt>提交</SubmitTxt>
+				</Button>
+			</BtnBox>
 			<FooterCard></FooterCard>
 		</>
 	);
@@ -129,17 +141,16 @@ const RightBox=styled.div`
 	flex: 1;
 	margin-left: 26px;
 `
-const SubmitBtn=styled.div`
-	width: 54vw;
-	height: 54px;
-	line-height: 54px;
+const BtnBox=styled.div`
+	width: 100%;
 	text-align: center;
-	background: #F86C29;
-	border-radius: 14px;
-	font-size: 24px;
+`
+
+const SubmitTxt=styled.span`
+	display:inline-block;
+	width: 38.5vw;
+	text-align: center;
 	font-weight: bold;
-	color: #FFFFFF;
-	margin: auto;
 	cursor: pointer;
 `
 

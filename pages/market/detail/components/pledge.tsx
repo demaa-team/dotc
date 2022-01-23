@@ -1,4 +1,4 @@
-import React,{useEffect, useMemo,useState} from 'react';
+import React,{useEffect, useMemo,useState,FC} from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import { useRouter } from 'next/router';
@@ -6,21 +6,53 @@ import styled,{css} from 'styled-components';
 import castArray from 'lodash/castArray';
 import HelpIcon from 'public/images/market/help-icon.png';
 import PriceCurrencySelect from 'sections/shared/modals/SettingsModal/PriceCurrencySelect';
+import Select from 'components/Select';
 import BaseModal from 'components/BaseModal';
 import Input from 'components/Input/Input';
+import Button from 'components/Button';
+import LabelInput from '../../../pending-order/components/label-input';
+
 import Img, { Svg } from 'react-optimized-image';
 import { Tooltip } from 'styles/common';
 
 let timer: number | null=null;
 const TIME=60;
 let time=60;
-const Pledge=()=>{
+interface PropsType{
+    onSelectChange:(v:string)=>void,
+}
+const Pledge:FC<PropsType>=({onSelectChange})=>{
     const [showModal,setShowModal]=useState(false);
     const [countDown,setCountDown]=useState(TIME);
     const [isCounting,setIsCounting]=useState(false);
+    const [maxNum,setMaxNum]=useState();
+    const [requestData,setRequestData]=useState({tel:'',code:''});
+    const [selectVal,setSelectVal]=useState('')
     const handleVerify=()=>{
         setShowModal(true);
     }
+    const changeMaxNum=(e:any)=>{
+        const t = e.target.value.replace(/[^\d]/g,'')
+        setMaxNum(t)
+        // const rg:any = /^d+$/
+        // if(rg.test(e.target.value)){
+        //     setMaxNum(e.target.value)
+        // }  
+    }
+    const handleChange=(key:string,val:any)=>{
+        setRequestData({...requestData,[key]:val})
+    }
+
+    const options=[
+        { value: 'chocolate', label: 'Chocolate' },
+        { value: 'strawberry', label: 'Strawberry' },
+        { value: 'vanilla', label: 'Vanilla' }
+    ]
+
+    const selectChange=(e:any)=>{
+        onSelectChange(e.value)
+    }
+
     const handleGetVerifyCode=()=>{
         if(isCounting)return;
         setIsCounting(true);
@@ -44,9 +76,8 @@ const Pledge=()=>{
     return (
         <Container>
             <div className="maxBox">
-                <div className="minBtn">最小</div>
-                <div className="val">1000</div>
-                <div className="maxBtn">最大</div>
+                <Input onChange={(e)=>changeMaxNum(e)} value={maxNum} placeholder='最小XXX,最大XXX'></Input>
+                <div className="allowBtn">最大值</div>
             </div>
             <div className="loan">
                 <div className="help">
@@ -65,7 +96,8 @@ const Pledge=()=>{
                 </div>
                 <div className="selectBox">
                     <SelectComponent>
-                        <PriceCurrencySelect/>
+                        <Select variant="solid" value={selectVal} options={options} className='select' onChange={(e)=>selectChange(e)}></Select>
+                        {/* <PriceCurrencySelect/> */}
                     </SelectComponent>
                     <div className="allowBtn">批准</div>
                 </div>
@@ -79,13 +111,15 @@ const Pledge=()=>{
             </BaseModal> */}
             <StyledBaseModal title="测试" onDismiss={()=>setShowModal(false)} isOpen={showModal}>
                 <ModalContent>
-                    <Input></Input>
+                    <LabelInput label='联系方式' name='tel' val={requestData.tel} onChange={handleChange}></LabelInput>
+                    <LabelInput label='验证码' name='code' val={requestData.code} onChange={handleChange}></LabelInput>
                     <GetVerifyCodeBtn onClick={handleGetVerifyCode} isForbid={isCounting}>{isCounting?countDown+'s':'获取验证码'}</GetVerifyCodeBtn>
                 </ModalContent>
 
                 <ModalFooter>
-                    <div className="btn" onClick={()=>setShowModal(false)}>确定</div>    
-                    <div className="btn" onClick={()=>setShowModal(false)}>取消</div>   
+                    <Button variant="primary" onClick={()=>setShowModal(false)}>
+                        <SubmitTxt>提交</SubmitTxt>
+                    </Button>
                 </ModalFooter>  
 
             </StyledBaseModal>
@@ -109,23 +143,13 @@ const StyledBaseModal = styled(BaseModal)`
 `;
 
 const ModalContent=styled.div`
-    display: flex;
+    position: relative;
 `
 const ModalFooter=styled.div`
     margin-top: 30px;
     display: flex;
     justify-content: space-between;
     padding: 0 5vw;
-    .btn{
-        width: 40%;
-        height: 50px;
-        line-height: 50px;
-        text-align: center;
-        font-size: 20px;
-        border-radius: 10px;
-        background: #5473E8;
-        cursor: pointer;
-    }
 `
 
 const GetVerifyCodeBtn=styled.div<{isForbid:boolean}>`
@@ -139,6 +163,9 @@ const GetVerifyCodeBtn=styled.div<{isForbid:boolean}>`
     /* padding: 0 10px; */
     border-radius: 0 10px 10px 0;
     cursor: ${(props)=>props.isForbid?'not-allowed':'pointer'};
+    position: absolute;
+    bottom: 9px;
+    right: 9px;
 `
 
 // 最大和最小公共样式
@@ -174,13 +201,22 @@ const Container=styled.div`
             color: #FFFFFF;
         }
 
-        .maxBtn{
-            ${maxAndMinCommon}
+        .allowBtn{
+            width: 22.5%;
+            height: 100%;
+            line-height: 60px;
+            text-align: center;
+            background: #5473E8;
             border-radius: 0px 10px 10px 0px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #FFFFFF;
+            cursor: pointer;
         }
-        .minBtn{
-            ${maxAndMinCommon}
-            border-radius: 10px 0px 0px 10px;
+        input{
+            width:77.5%;
+            height:60px;
+            background-color: #1A2479;
         }
     }
     .loan{
@@ -188,13 +224,14 @@ const Container=styled.div`
         height: 60px;
         margin-top: 34px;
         .help{
-            width: 120px;
+            width: 28%;
             height: 100%;
             display: flex;
             align-items: center;
-            /* background: #1A2479; */
+            background: #1A2479;
             border-radius: 10px;
             padding: 0 16px;
+            margin-right: 1.3%;
             .questionIcon{
                 width: 28px;
                 height: 28px;
@@ -212,7 +249,7 @@ const Container=styled.div`
             border-radius: 10px;
             display: flex;
             .allowBtn{
-                width: 150px;
+                width: 22.5%;
                 height: 100%;
                 line-height: 60px;
                 text-align: center;
@@ -241,10 +278,14 @@ const Container=styled.div`
 `
 
 const SelectComponent=styled.div`
-    /* width: 240px; */
     flex: 1;
     .react-select__control{
         height: 60px;
+        /* width: 36.4%; */
+    }
+    .select{
+        border-radius: 10px 0px 0px 10px;
+        background: unset;
     }
 `
 
@@ -261,6 +302,11 @@ const PledgeInfoTooltip = styled(Tooltip)`
 const Strong = styled.strong`
 	font-family: ${(props) => props.theme.fonts.interBold};
 `;
+
+const SubmitTxt = styled.span`
+    display: inline-block;
+    width:16vw;
+`
 
 
 export default Pledge;

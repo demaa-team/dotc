@@ -44,8 +44,9 @@ const FooterCard=()=>{
                         }
                     >
                         <CopyClipboardContainer>
-                            <CopyToClipboard text={'+8612345678'} onCopy={() => setTelCopied(true)}>
-                                {telCopied ? (
+                            <CopyToClipboard text={'+8612345678'} onCopy={() => setTelCopied(false)}>
+                            <Svg src={CopyIcon} />
+                                {/* {telCopied ? (
                                     <Svg
                                         src={CheckIcon}
                                         width="16"
@@ -54,7 +55,7 @@ const FooterCard=()=>{
                                     />
                                 ) : (
                                     <Svg src={CopyIcon} />
-                                )}
+                                )} */}
                             </CopyToClipboard>
                         </CopyClipboardContainer>
                     </Tooltip>
@@ -67,14 +68,16 @@ const FooterCard=()=>{
                         hideOnClick={false}
                         arrow={true}
                         placement="bottom"
-                        content={
-                            wxCopied ? t('modals.wallet.copy-address.copied')
-                                : t('modals.wallet.copy-address.copy-to-clipboard')
-                        }
+                        content={t('modals.wallet.copy-address.copy-to-clipboard')}
+                        // content={
+                        //     wxCopied ? t('modals.wallet.copy-address.copied')
+                        //         : t('modals.wallet.copy-address.copy-to-clipboard')
+                        // }
                     >
                         <CopyClipboardContainer>
-                            <CopyToClipboard text={'+8612345678'} onCopy={() => setWxCopied(true)}>
-                                {wxCopied ? (
+                            <CopyToClipboard text={'+8612345678'} onCopy={() => setWxCopied(false)}>
+                            <Svg src={CopyIcon} />
+                                {/* {wxCopied ? (
                                     <Svg
                                         src={CheckIcon}
                                         width="16"
@@ -83,7 +86,7 @@ const FooterCard=()=>{
                                     />
                                 ) : (
                                     <Svg src={CopyIcon} />
-                                )}
+                                )} */}
                             </CopyToClipboard>
                         </CopyClipboardContainer>
                     </Tooltip>
@@ -93,7 +96,7 @@ const FooterCard=()=>{
             <div className="title">支付方式</div>
                 <div className="row">
                     <Img className='icon wx' src={WeiXinIcon} />
-                    <div className="desc">+8612345678</div>
+                    <div className="desc">+86123456781</div>
                     <Tooltip
                         hideOnClick={false}
                         arrow={true}
@@ -105,7 +108,7 @@ const FooterCard=()=>{
                         }
                     >
                         <CopyClipboardContainer>
-                            <CopyToClipboard text={'+86123456789'} onCopy={() => setWxPayCopied(true)}>
+                            <CopyToClipboard text={'+86123456781'} onCopy={() => setWxPayCopied(false)}>
                                 {/* {wxPayCopied ? (
                                     <Svg
                                         src={CheckIcon}
@@ -123,7 +126,7 @@ const FooterCard=()=>{
                 </div>
                 <div className="row">
                     <Img className='icon paypal' src={PaypalIcon}/>
-                    <div className="desc">+8612345678</div>
+                    <div className="desc">+86123456781</div>
                     <Tooltip
                         hideOnClick={false}
                         arrow={true}
@@ -134,8 +137,9 @@ const FooterCard=()=>{
                         }
                     >
                         <CopyClipboardContainer>
-                            <CopyToClipboard text={'+8612345678'} onCopy={() => setPaypalCopied(true)}>
-                                {paypalCopied ? (
+                            <CopyToClipboard text={'+86123456781'} onCopy={() => setPaypalCopied(false)}>
+                            <Svg src={CopyIcon} />
+                                {/* {paypalCopied ? (
                                     <Svg
                                         src={CheckIcon}
                                         width="16"
@@ -144,7 +148,7 @@ const FooterCard=()=>{
                                     />
                                 ) : (
                                     <Svg src={CopyIcon} />
-                                )}
+                                )} */}
                             </CopyToClipboard>
                         </CopyClipboardContainer>
                     </Tooltip>
