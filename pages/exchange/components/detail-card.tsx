@@ -1,8 +1,12 @@
 import React, { FC, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 
-const DetailCard:FC<{list:any}> = ({list}) => {
+const DetailCard:FC<{list:any,isLast:boolean,showHistory:any}> = ({list,isLast,showHistory}) => {
 
+    const click=()=>{
+        showHistory(true)
+    }
+    
     return (
         <Container>
             {
@@ -12,6 +16,9 @@ const DetailCard:FC<{list:any}> = ({list}) => {
                         <RightBox>{v.val}</RightBox>
                     </ItemBoxWrap>
                 )
+            }
+            {
+                isLast && <LinkBox onClick={click}><span>查看仲裁辩护记录展示</span></LinkBox>
             }
         </Container>
     )
@@ -29,6 +36,16 @@ const Container=styled.div`
     grid-column-gap: 50px;
     align-content: center;
 `
+
+const LinkBox=styled.div`
+    width: 217%;
+    text-align: right;
+    span{
+        cursor: pointer;
+        text-decoration:underline;
+    }
+`
+
 const ItemBoxWrap=styled.div`
     /* background: gray; */
     display: flex;

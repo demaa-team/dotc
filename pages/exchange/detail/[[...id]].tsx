@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import Button from 'components/Button';
 import castArray from 'lodash/castArray';
 // import Personal from './components/personal';
 // import Pledge from './components/pledge';
@@ -18,6 +19,7 @@ const Detail = () => {
     const router = useRouter();
 	const { t } = useTranslation();
     const [arbitrationModal,setArbitrationModal]=useState(false);
+    const [arbitrationHistoryModal,setArbitrationHistoryModal]=useState(false);
 
 	const listData=[
         {
@@ -109,17 +111,25 @@ const Detail = () => {
 			</Head>
 			<Container>
                 {
-                    listData.map(v=>
-                        <DetailCard key={v.key} list={v.list}></DetailCard>
+                    listData.map((v,i)=>
+                        <DetailCard key={v.key} list={v.list} isLast={i===listData.length-1} showHistory={setArbitrationHistoryModal}></DetailCard>
                     )
                 }
 
 			</Container>
             <HandleBtnGroup>
-                <div className="btn">确认</div>
-                <div className="btn">取消</div>
-                <div className="btn" onClick={()=>setArbitrationModal(true)}>申请仲裁</div>
-                <div className="btn">辩护</div> 
+                <Button variant="primary" size='xl'>
+                    <SubmitTxt width='100%'>确认</SubmitTxt>
+                </Button>
+                <Button variant="primary" size='xl' disabled>
+                    <SubmitTxt width='100%'>取消</SubmitTxt>
+                </Button>
+                <Button variant="primary" size='xl' onClick={()=>setArbitrationModal(true)}>
+                    <SubmitTxt width='100%'>申请仲裁</SubmitTxt>
+                </Button>
+                <Button variant="primary" size='xl' disabled>
+                    <SubmitTxt width='100%'>辩护</SubmitTxt>
+                </Button>
             </HandleBtnGroup>
 
             <StyledBaseModal isOpen={arbitrationModal} onDismiss={()=>setArbitrationModal(false)}>
@@ -142,6 +152,32 @@ const Detail = () => {
                 </ModalWrap>
             </StyledBaseModal>
 
+            <StyledBaseModal isOpen={arbitrationHistoryModal} onDismiss={()=>setArbitrationHistoryModal(false)}>
+                <ModalWrap>
+                    <MTitile>查看仲裁和申诉历史</MTitile>
+                    <MDesc>
+                        证据需为交易生成时间开始3天以上的转账记录或1天以上的收款记录，最多可提交4张交易
+                        记录截图。证据图片需清晰，时间连续，无PS修改。系统将自动使用图片检测工具对证据是
+                        否存在修改情况作出判断，一旦发现图片有修改痕迹，仲裁将该证据提供者判定为作恶者，
+                        并执行最终仲裁。
+                    </MDesc>
+                    <EvidenceList>
+                        {
+                            [1,2,3,4].map(v=>
+                                <Evidence key={v}></Evidence>
+                            )
+                        }
+                    </EvidenceList>
+                    <Button variant="primary" size='xl'>
+                        <SubmitTxt width='100%'>确认</SubmitTxt>
+                    </Button>
+                    <Button variant="primary" size='xl'>
+                        <SubmitTxt width='100%'>取消</SubmitTxt>
+                    </Button>
+                </ModalWrap>
+            </StyledBaseModal>
+
+
 		</>
 	);
 };
@@ -154,6 +190,11 @@ const Container = styled.div`
     grid-column-gap: 26px;
     grid-row-gap: 22px;
 `;
+
+const SubmitTxt = styled.span`
+    display: inline-block;
+    width:${(props) => props.width};;
+`
 
 const HandleBtnGroup=styled.div`
     display: grid;

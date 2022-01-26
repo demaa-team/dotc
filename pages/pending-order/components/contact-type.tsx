@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import TextInput from 'components/Input/TextInput';
 import Select from 'components/Select';
+import Button from 'components/Button';
 
 import UIContainer from 'containers/UI';
 interface PropsType{
@@ -36,7 +37,9 @@ const ContactType: FC<PropsType> = ({list,label,onInputChange,onSelectChange,onA
                     </RowWrap>
                 )
             }
-            <IncreaseBtn onClick={onAdd}>+</IncreaseBtn>
+            <Button variant="primary" size='xl'  onClick={onAdd}>
+                <SubmitTxt width='38.9vw'>+</SubmitTxt>
+            </Button>
         </Wrapper>
 	);
 };
@@ -51,6 +54,12 @@ const btnCss=css`
 		background: #F86C29;
 	}
 `
+
+const SubmitTxt = styled.span`
+    display: inline-block;
+    width:${(props) => props.width};;
+`
+
 const Wrapper=styled.div`
     margin-right: 60px;
     flex: 1;

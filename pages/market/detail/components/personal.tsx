@@ -96,8 +96,9 @@ const Container=styled.div`
             }
             .moneyBox{
                 margin-right: 50px;
+                margin-top: -46px;
                 font-weight: bold;
-                    color: #FFFFFF;
+                color: #FFFFFF;
                 .num{
                     line-height: 1;
                     font-size: 58px;

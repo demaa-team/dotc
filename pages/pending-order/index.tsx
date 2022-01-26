@@ -6,6 +6,7 @@ import Deal from './components/deal';
 import LabelInput from './components/label-input';
 import SelectInput from './components/select-input';
 import ContactType from './components/contact-type';
+import Button from 'components/Button';
 import Upload from 'rc-upload';
 
 import UIContainer from 'containers/UI';
@@ -13,7 +14,7 @@ import UIContainer from 'containers/UI';
 const PendingOrder: FC = () => {
 	const { t } = useTranslation();
 	const { setTitle } = UIContainer.useContainer();
-	const [requestData,setRequestData]=useState({name:'',ad:'',price:{select:null,input:''},goods:{select:null,input:''}});
+	const [requestData,setRequestData]=useState({name:'',ad:'',auth:'',price:{select:null,input:''},goods:{select:null,input:''}});
 	const [contactList,setContactList]=useState([{select:null,input:''}]);
 	const [payList,setPayList]=useState([{select:null,input:''}]);
 	// header title
@@ -152,8 +153,12 @@ const PendingOrder: FC = () => {
 								></SelectInput>
 							</ASCol>
 						</ASRow>
-						
-						<SystemBtn>批准系统转款</SystemBtn>
+						<LabelInput label='认证信息' name='auth' val={requestData.auth} onChange={handleNameChange}></LabelInput>
+						<div style={{marginTop:'50px'}}>
+							<Button variant="primary" size='xl'>
+								<SubmitTxt width='64.3vw'>批准系统转款</SubmitTxt>
+							</Button>
+						</div>
 					</AllowSystemBox>
 					<UploadAvatarBox>
 						<div className="label">头像</div>
@@ -162,7 +167,11 @@ const PendingOrder: FC = () => {
 						</AvatarWrap>
 						{/* @ts-ignore */}
 						<Upload {...UploadProps}>
-							<UploadAvatarBtn>上传头像</UploadAvatarBtn>
+							<div style={{marginTop:'50px'}}>
+								<Button variant="primary" size='xl'>
+									<SubmitTxt width='14.6vw'>上传头像</SubmitTxt>
+								</Button>
+							</div>
 						</Upload>
 					</UploadAvatarBox>
 				</TopBox>
@@ -187,9 +196,12 @@ const PendingOrder: FC = () => {
 				</BottomBox>
 
 				<HandleBtnGroup>
-					<ItemBtn>开&nbsp;&nbsp;&nbsp;&nbsp;单</ItemBtn>
+					<Button variant="primary" size='xl'>
+						<SubmitTxt width='81vw'>开&nbsp;&nbsp;&nbsp;&nbsp;单</SubmitTxt>
+					</Button>
+					{/* <ItemBtn>开&nbsp;&nbsp;&nbsp;&nbsp;单</ItemBtn>
 					<ItemBtn>编&nbsp;&nbsp;&nbsp;&nbsp;辑</ItemBtn>
-					<ItemBtn>删&nbsp;&nbsp;&nbsp;&nbsp;除</ItemBtn>
+					<ItemBtn>删&nbsp;&nbsp;&nbsp;&nbsp;除</ItemBtn> */}
 				</HandleBtnGroup>
 			</Container>
 		</>
@@ -207,6 +219,11 @@ const btnCss = css`
 		background: #F86C29;
 	}
 `;
+
+const SubmitTxt = styled.span`
+    display: inline-block;
+    width:${(props) => props.width};;
+`
 
 const Container=styled.div`
 	padding: 90px 60px;

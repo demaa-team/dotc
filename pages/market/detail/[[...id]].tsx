@@ -114,7 +114,7 @@ const Detail = () => {
 				</RightBox>
 			</Container>
 			<BtnBox>
-				<Button variant="primary">
+				<Button variant="primary" size='xl'>
 					<SubmitTxt>提交</SubmitTxt>
 				</Button>
 			</BtnBox>

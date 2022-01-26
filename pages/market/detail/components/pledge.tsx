@@ -13,7 +13,7 @@ import Button from 'components/Button';
 import LabelInput from '../../../pending-order/components/label-input';
 
 import Img, { Svg } from 'react-optimized-image';
-import { Tooltip } from 'styles/common';
+import { Tooltip,FlexDiv } from 'styles/common';
 
 let timer: number | null=null;
 const TIME=60;
@@ -22,6 +22,7 @@ interface PropsType{
     onSelectChange:(v:string)=>void,
 }
 const Pledge:FC<PropsType>=({onSelectChange})=>{
+    const {t}=useTranslation();
     const [showModal,setShowModal]=useState(false);
     const [countDown,setCountDown]=useState(TIME);
     const [isCounting,setIsCounting]=useState(false);
@@ -34,11 +35,12 @@ const Pledge:FC<PropsType>=({onSelectChange})=>{
     const changeMaxNum=(e:any)=>{
         const t = e.target.value.replace(/[^\d]/g,'')
         setMaxNum(t)
-        // const rg:any = /^d+$/
-        // if(rg.test(e.target.value)){
-        //     setMaxNum(e.target.value)
-        // }  
     }
+
+    const fixMaxNum=()=>{
+        setMaxNum('1000')
+    }
+
     const handleChange=(key:string,val:any)=>{
         setRequestData({...requestData,[key]:val})
     }
@@ -76,12 +78,22 @@ const Pledge:FC<PropsType>=({onSelectChange})=>{
     return (
         <Container>
             <div className="maxBox">
-                <Input onChange={(e)=>changeMaxNum(e)} value={maxNum} placeholder='最小XXX,最大XXX'></Input>
-                <div className="allowBtn">最大值</div>
+                <Input onChange={(e)=>changeMaxNum(e)} value={maxNum} placeholder='最小XXX'></Input>
+                <div className="allowBtn" onClick={fixMaxNum}>最大值</div>
             </div>
             <div className="loan">
                 <div className="help">
-                    <PledgeInfoTooltip
+                    <Tooltip
+                        arrow={true}
+                        placement="bottom"
+                        content={                            t('modals.wallet.copy-address.copy-to-clipboard')
+                    }
+                    >
+                        <CopyClipboardContainer>
+                        <Img className='questionIcon' src={HelpIcon}/>
+                        </CopyClipboardContainer>
+                    </Tooltip>
+                    {/* <PledgeInfoTooltip
                         arrow={true}
                         content={
                             <Trans
@@ -91,7 +103,7 @@ const Pledge:FC<PropsType>=({onSelectChange})=>{
                         }
                     >
                         <Img className='questionIcon' src={HelpIcon}/>
-                    </PledgeInfoTooltip>
+                    </PledgeInfoTooltip> */}
                     <div className="txt">抵押:</div>
                 </div>
                 <div className="selectBox">
@@ -117,7 +129,7 @@ const Pledge:FC<PropsType>=({onSelectChange})=>{
                 </ModalContent>
 
                 <ModalFooter>
-                    <Button variant="primary" onClick={()=>setShowModal(false)}>
+                    <Button variant="primary" size='xl' onClick={()=>setShowModal(false)}>
                         <SubmitTxt>提交</SubmitTxt>
                     </Button>
                 </ModalFooter>  
@@ -249,7 +261,7 @@ const Container=styled.div`
             border-radius: 10px;
             display: flex;
             .allowBtn{
-                width: 22.5%;
+                width: 32.5%;
                 height: 100%;
                 line-height: 60px;
                 text-align: center;
@@ -307,6 +319,15 @@ const SubmitTxt = styled.span`
     display: inline-block;
     width:16vw;
 `
-
+const CopyClipboardContainer = styled(FlexDiv)`
+	cursor: pointer;
+	color: ${(props) => props.theme.colors.gray};
+	margin-left: 10px;
+	&:hover {
+		svg {
+			color: ${(props) => props.theme.colors.white};
+		}
+	}
+`;
 
 export default Pledge;
