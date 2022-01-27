@@ -12,26 +12,27 @@ interface PropsType{
     onInputChange:(v:string,i:number)=>void,
     onSelectChange:(v:any,i:number)=>void,
     list:any,
+    selectOptions:any[],
     onAdd:()=>void,
     onRemove:(i:number)=>void,
 }
-const ContactType: FC<PropsType> = ({list,label,onInputChange,onSelectChange,onAdd,onRemove}) => {
-	const { t } = useTranslation();
-    const options=[
-		{
-			value: 'phone', label: '电话'
-		},
-		{
-			value: 'wechat', label: '微信'
-		},
-	]
+const ContactType: FC<PropsType> = ({list,label,onInputChange,onSelectChange,onAdd,onRemove,selectOptions}) => {
+	const { t,i18n } = useTranslation();
+    const options:any[] = []
+    selectOptions.forEach(i=>{
+        const item = {
+            value:i.value,
+            label:i[i18n.language]
+        }
+        options.push(item)
+    })
 	return (
 		<Wrapper>
             <div className="label">{label}</div>
             {
                 list.map((v:any,index:number)=>
                     <RowWrap key={index}>
-                        <Select variant="outline" value={v.select} options={options} className='select' onChange={(e)=>onSelectChange(e,index)}></Select>
+                        <Select variant="outline" value={v.method} options={options} className='select' onChange={(e)=>onSelectChange(e,index)}></Select>
                         <TextInput value={v.input} placeholder='请输入' onChange={(e)=>onInputChange(e.target.value,index)} className='input'></TextInput>
                         <RemoveBtn onClick={()=>onRemove(index)} isForbid={list.length===1}></RemoveBtn>
                     </RowWrap>

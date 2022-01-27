@@ -2,6 +2,7 @@ import { FC, useEffect,useState } from 'react';
 import Head from 'next/head';
 import styled,{css} from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import {ContactSelectOptions,PaySelectOptions} from './assets/config'
 import Deal from './components/deal';
 import LabelInput from './components/label-input';
 import SelectInput from './components/select-input';
@@ -14,13 +15,14 @@ import UIContainer from 'containers/UI';
 const PendingOrder: FC = () => {
 	const { t } = useTranslation();
 	const { setTitle } = UIContainer.useContainer();
-	const [requestData,setRequestData]=useState({name:'',ad:'',auth:'',price:{select:null,input:''},goods:{select:null,input:''}});
-	const [contactList,setContactList]=useState([{select:null,input:''}]);
-	const [payList,setPayList]=useState([{select:null,input:''}]);
+	const [requestData,setRequestData]=useState({alias:'',ad:'',auth:'',price:{select:null,input:''},goods:{select:null,input:''}});
+	const [contactList,setContactList]=useState([{method:'',address:''}]);
+	const [payList,setPayList]=useState([{method:'',address:''}]);
 	// header title
 	// useEffect(() => {
 	// 	setTitle('wallet', 'escrow');
 	// }, [setTitle]);
+
 	const handleNameChange=(key:string,val:any)=>{
 		setRequestData({...requestData,[key]:val})
 	}
@@ -42,16 +44,16 @@ const PendingOrder: FC = () => {
 	const handleAdd=(type:string)=>{
 		if(type==='contact'){
 			contactList.push({
-				select:null,
-				input:''
+				method:'',
+				address:''
 			})
 			setContactList([...contactList]);
 			return;
 		}
 		if(type==='pay'){
 			payList.push({
-				select:null,
-				input:''
+				method:'',
+				address:''
 			})
 			setPayList([...payList]);
 			return;
@@ -71,28 +73,28 @@ const PendingOrder: FC = () => {
 			setPayList([...payList]);
 			return;
 		}
-		
+
 	}
 	const handleInputChange=(v:any,i:number,type:string)=>{
 		if(type==='contact'){
-			contactList[i].input=v;
+			contactList[i].address=v;
 			setContactList([...contactList]);
 			return;
 		}
 		if(type==='pay'){
-			payList[i].input=v;
+			payList[i].address=v;
 			setPayList([...payList]);
 			return;
 		}
-	}	
+	}
 	const handleOnSelectChange=(v:any,i:number,type:string)=>{
 		if(type==='contact'){
-			contactList[i].select=v;
+			contactList[i].method=v;
 			setContactList([...contactList]);
 			return;
 		}
 		if(type==='pay'){
-			payList[i].select=v;
+			payList[i].method=v;
 			setPayList([...payList]);
 			return;
 		}
@@ -138,8 +140,8 @@ const PendingOrder: FC = () => {
 								<LabelInput label='广告' name='ad' val={requestData.ad} onChange={handleNameChange}></LabelInput>
 							</ASCol>
 							<ASCol>
-								<SelectInput 
-									label="价格" 
+								<SelectInput
+									label="价格"
 									name='price'
 									options={options}
 									onInputChange={handleSelectInputChange}
@@ -147,8 +149,8 @@ const PendingOrder: FC = () => {
 									inputVal={requestData.price.input}
 									onSelectChange={handleSelectChange}
 								></SelectInput>
-								<SelectInput 
-									label="价格" 
+								<SelectInput
+									label="价格"
 									name='goods'
 									options={options}
 									onInputChange={handleSelectInputChange}
@@ -182,8 +184,9 @@ const PendingOrder: FC = () => {
 				</TopBox>
 				<BottomBox>
 					<ContactType
-						label="联系方式" 
+						label="联系方式"
 						list={contactList}
+						selectOptions={ContactSelectOptions}
 						onAdd={()=>handleAdd('contact')}
 						onRemove={(i)=>handleRemove(i,'contact')}
 						onInputChange={(v,i)=>handleInputChange(v,i,'contact')}
@@ -191,8 +194,9 @@ const PendingOrder: FC = () => {
 					></ContactType>
 
 					<ContactType
-						label="支付方式" 
+						label="支付方式"
 						list={payList}
+						selectOptions={PaySelectOptions}
 						onAdd={()=>handleAdd('pay')}
 						onRemove={(i)=>handleRemove(i,'pay')}
 						onInputChange={(v,i)=>handleInputChange(v,i,'pay')}
