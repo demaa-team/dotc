@@ -156,24 +156,16 @@ const Detail = () => {
                 <ModalWrap>
                     <MTitile>查看仲裁和申诉历史</MTitile>
                     <MDesc>
-                        证据需为交易生成时间开始3天以上的转账记录或1天以上的收款记录，最多可提交4张交易
-                        记录截图。证据图片需清晰，时间连续，无PS修改。系统将自动使用图片检测工具对证据是
-                        否存在修改情况作出判断，一旦发现图片有修改痕迹，仲裁将该证据提供者判定为作恶者，
-                        并执行最终仲裁。
+                        仲裁记录
                     </MDesc>
-                    <EvidenceList>
-                        {
-                            [1,2,3,4].map(v=>
-                                <Evidence key={v}></Evidence>
-                            )
-                        }
-                    </EvidenceList>
-                    <Button variant="primary" size='xl'>
-                        <SubmitTxt width='100%'>确认</SubmitTxt>
-                    </Button>
-                    <Button variant="primary" size='xl'>
-                        <SubmitTxt width='100%'>取消</SubmitTxt>
-                    </Button>
+                    <MDesc>
+                        申诉记录
+                    </MDesc>
+                    <BtnBox>
+                        <Button variant="primary" size='xl' onClick={()=>setArbitrationHistoryModal(false)}>
+                            <SubmitTxt width='100%'>取消</SubmitTxt>
+                        </Button>    
+                    </BtnBox>
                 </ModalWrap>
             </StyledBaseModal>
 
@@ -202,6 +194,8 @@ const HandleBtnGroup=styled.div`
     grid-template-rows: 60px 60px;
     grid-row-gap: 17px;
     grid-column-gap: 26px;
+    width: 84%;
+    margin:auto;
     .btn{
         line-height: 60px;
         text-align: center;
@@ -240,6 +234,12 @@ const EvidenceList=styled.div`
     grid-template-columns: repeat(4, 1fr);
     justify-content: center;
     grid-column-gap: 40px;
+`
+
+const BtnBox=styled.div`
+    width: 100%;
+    text-align: right;
+    margin-top: 10px;
 `
 
 const StyledBaseModal = styled(BaseModal)`

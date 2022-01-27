@@ -125,6 +125,11 @@ const PendingOrder: FC = () => {
 			{/* <NoWallet /> */}
 			{/* <Deal /> */}
 			<Container>
+					<OperationBox>
+						<Button variant='text'>编辑</Button>
+						----
+						<Button variant='text'>删除</Button>
+					</OperationBox>
 				<TopBox>
 					<AllowSystemBox>
 						<ASRow>
@@ -226,9 +231,14 @@ const SubmitTxt = styled.span`
 `
 
 const Container=styled.div`
-	padding: 90px 60px;
+	padding: 50px 60px;
 	border-radius: 22px;
 	background: #203298;
+`
+
+const OperationBox=styled.div`
+	width: 100%;
+	text-align: right;
 `
 
 const TopBox=styled.div`
@@ -258,7 +268,7 @@ const UploadAvatarBox=styled.div`
 `
 
 const AvatarWrap=styled.div`
-	width: 369px;
+	width: 100%;
 	height: 234px;
 	background: #192987;
 	border-radius: 14px;
