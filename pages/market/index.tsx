@@ -1,311 +1,222 @@
-import { FC, useEffect,useState } from 'react';
+import React from 'react';
 import Head from 'next/head';
-import styled,{css} from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import {ContactSelectOptions,PaySelectOptions} from './assets/config'
-import Deal from './components/deal';
-import LabelInput from './components/label-input';
-import SelectInput from './components/select-input';
-import ContactType from './components/contact-type';
-import Button from 'components/Button';
-import Upload from 'rc-upload';
+import { useRecoilValue } from 'recoil';
+import { useRouter } from 'next/router';
+import styled from 'styled-components';
+import WeiXinImg from 'public/images/market/weixin.png';
+import PayPalImg from 'public/images/market/paypal.png';
+import Img, { Svg } from 'react-optimized-image';
 
-import UIContainer from 'containers/UI';
-
-const PendingOrder: FC = () => {
+const Market = () => {
+	const router = useRouter();
 	const { t } = useTranslation();
-	const { setTitle } = UIContainer.useContainer();
-	const [requestData,setRequestData]=useState({alias:'',ad:'',auth:'',price:{select:null,input:''},goods:{select:null,input:''}});
-	const [contactList,setContactList]=useState([{method:'',address:''}]);
-	const [payList,setPayList]=useState([{method:'',address:''}]);
-	// header title
-	// useEffect(() => {
-	// 	setTitle('wallet', 'escrow');
-	// }, [setTitle]);
-
-	const handleNameChange=(key:string,val:any)=>{
-		setRequestData({...requestData,[key]:val})
-	}
-	const handleSelectInputChange=(key:string,v:any)=>{
-		// @ts-ignore
-		setRequestData({...requestData,[key]:{select:requestData[key]?.select,input:v}})
-	}
-
-	const handleSelectChange=(key:string,v:any)=>{
-		setRequestData({...requestData,[key]:{select:v,input:''}})
-	}
-
-	const options=[
-		{ value: 'chocolate', label: 'Chocolate' },
-		{ value: 'strawberry', label: 'Strawberry' },
-		{ value: 'vanilla', label: 'Vanilla' },
+	const itemCardContentData=[
+		{
+			label:'剩余',
+			val:1000,
+			unit:'USDT'
+		},
+		{
+			label:'单价',
+			val:6.33,
+			unit:'元'
+		},
+		{
+			label:'成交',
+			val:250000,
+			unit:'USDT'
+		},
+		{
+			label:'用时',
+			val:10,
+			unit:'分钟'
+		}
 	]
 
-	const handleAdd=(type:string)=>{
-		if(type==='contact'){
-			contactList.push({
-				method:'',
-				address:''
-			})
-			setContactList([...contactList]);
-			return;
-		}
-		if(type==='pay'){
-			payList.push({
-				method:'',
-				address:''
-			})
-			setPayList([...payList]);
-			return;
-		}
+	const handleJumpDetail=()=>{
+		router.push('/market/detail/123');
 	}
-
-	const handleRemove=(idx:number,type:string)=>{
-		if(type==='contact'){
-			if(contactList.length===1)return;
-			contactList.splice(idx,1);
-			setContactList([...contactList]);
-			return;
-		}
-		if(type==='pay'){
-			if(payList.length===1)return;
-			payList.splice(idx,1);
-			setPayList([...payList]);
-			return;
-		}
-
-	}
-	const handleInputChange=(v:any,i:number,type:string)=>{
-		if(type==='contact'){
-			contactList[i].address=v;
-			setContactList([...contactList]);
-			return;
-		}
-		if(type==='pay'){
-			payList[i].address=v;
-			setPayList([...payList]);
-			return;
-		}
-	}
-	const handleOnSelectChange=(v:any,i:number,type:string)=>{
-		if(type==='contact'){
-			contactList[i].method=v;
-			setContactList([...contactList]);
-			return;
-		}
-		if(type==='pay'){
-			payList[i].method=v;
-			setPayList([...payList]);
-			return;
-		}
-	}
-
-	const UploadProps={
-		action: () => {
-			return new Promise(resolve => {
-			  setTimeout(() => {
-				resolve('/upload.do');
-			  }, 2000);
-			});
-		},
-		onStart(file:any) {
-			console.log('onStart', file, file.name);
-		},
-		onSuccess(ret:any) {
-			console.log('onSuccess', ret);
-		},
-		onError(err:any) {
-			console.log('onError', err);
-		},
-	}
-
 	return (
 		<>
 			<Head>
-				<title>{t('pending-order.page-title')}</title>
+				<title>{t('market.page-title')}</title>
 			</Head>
-			{/* <NoWallet /> */}
-			{/* <Deal /> */}
 			<Container>
-					<OperationBox>
-						<Button variant='text'>编辑</Button>
-						----
-						<Button variant='text'>删除</Button>
-					</OperationBox>
-				<TopBox>
-					<AllowSystemBox>
-						<ASRow>
-							<ASCol>
-								<LabelInput label='化名' name='name' val={requestData.name} onChange={handleNameChange}></LabelInput>
-								<LabelInput label='广告' name='ad' val={requestData.ad} onChange={handleNameChange}></LabelInput>
-							</ASCol>
-							<ASCol>
-								<SelectInput
-									label="价格"
-									name='price'
-									options={options}
-									onInputChange={handleSelectInputChange}
-									selectVal={requestData.price.select}
-									inputVal={requestData.price.input}
-									onSelectChange={handleSelectChange}
-								></SelectInput>
-								<SelectInput
-									label="价格"
-									name='goods'
-									options={options}
-									onInputChange={handleSelectInputChange}
-									selectVal={requestData.goods.select}
-									inputVal={requestData.goods.input}
-									onSelectChange={handleSelectChange}
-								></SelectInput>
-							</ASCol>
-						</ASRow>
-						<LabelInput label='认证信息' name='auth' val={requestData.auth} onChange={handleNameChange}></LabelInput>
-						<div style={{marginTop:'50px'}}>
-							<Button variant="primary" size='xl'>
-								<SubmitTxt width='64.3vw'>批准系统转款</SubmitTxt>
-							</Button>
-						</div>
-					</AllowSystemBox>
-					<UploadAvatarBox>
-						<div className="label">头像</div>
-						<AvatarWrap>
-							<img className='avatar' src="http://m.imeitou.com/uploads/allimg/2016062920/ke4rrvvmx5g.jpg" alt=""/>
-						</AvatarWrap>
-						{/* @ts-ignore */}
-						<Upload {...UploadProps}>
-							<div style={{marginTop:'50px'}}>
-								<Button variant="primary" size='xl'>
-									<SubmitTxt width='14.6vw'>上传头像</SubmitTxt>
-								</Button>
-							</div>
-						</Upload>
-					</UploadAvatarBox>
-				</TopBox>
-				<BottomBox>
-					<ContactType
-						label="联系方式"
-						list={contactList}
-						selectOptions={ContactSelectOptions}
-						onAdd={()=>handleAdd('contact')}
-						onRemove={(i)=>handleRemove(i,'contact')}
-						onInputChange={(v,i)=>handleInputChange(v,i,'contact')}
-						onSelectChange={(v,i)=>handleOnSelectChange(v,i,'contact')}
-					></ContactType>
-
-					<ContactType
-						label="支付方式"
-						list={payList}
-						selectOptions={PaySelectOptions}
-						onAdd={()=>handleAdd('pay')}
-						onRemove={(i)=>handleRemove(i,'pay')}
-						onInputChange={(v,i)=>handleInputChange(v,i,'pay')}
-						onSelectChange={(v,i)=>handleOnSelectChange(v,i,'pay')}
-					></ContactType>
-				</BottomBox>
-
-				<HandleBtnGroup>
-					<Button variant="primary" size='xl'>
-						<SubmitTxt width='81vw'>开&nbsp;&nbsp;&nbsp;&nbsp;单</SubmitTxt>
-					</Button>
-					{/* <ItemBtn>开&nbsp;&nbsp;&nbsp;&nbsp;单</ItemBtn>
-					<ItemBtn>编&nbsp;&nbsp;&nbsp;&nbsp;辑</ItemBtn>
-					<ItemBtn>删&nbsp;&nbsp;&nbsp;&nbsp;除</ItemBtn> */}
-				</HandleBtnGroup>
+				{
+					[1,2,3,4,5,6,7,8,9,10].map(v=>
+						<ItemCard key={v}>
+							<HeaderBox>
+								<div className="avatarBox">
+									<img className='avatar' src="https://pica.zhimg.com/80/v2-308d6eecb6bf60f53be0d6eeade0c734_720w.jpg?source=1940ef5c" alt="" />
+								</div>
+								<div className="name">大掌柜</div>
+								<div className="desc">安全、放贷速度快</div>
+							</HeaderBox>
+							<SplitLine/>
+							<ItemContent>
+								{
+									itemCardContentData.map((v,i)=>
+										<div className="row" key={i}>
+											<div className="label">{v.label}</div>
+											<div className="val">{v.val}</div>
+											<div className="unit">{v.unit}</div>
+										</div>
+									)
+								}
+								<div className="row">
+									<div className="label">支付</div>
+									<div className="payType">
+										<Img className='payImg' src={WeiXinImg}/>
+										<Img className='payImg' src={PayPalImg}/>
+									</div>
+								</div>
+								<JumpBtn className='jumpBtn' onClick={handleJumpDetail}/>
+							</ItemContent>
+						</ItemCard>
+					)
+				}
+				
 			</Container>
 		</>
 	);
 };
 
-const btnCss = css`
-	height: 54px;
-	line-height: 54px;
-	text-align: center;
-	background: #6D83FF;
-	border-radius: 14px;
-	cursor: pointer;
-	:hover{
-		background: #F86C29;
+const Container = styled.div`
+	padding: 80px 10px;
+	/* display: flex;
+    flex-wrap: wrap;
+	justify-content: center; */
+	display: grid;
+	justify-content: center;
+	grid-template-columns: repeat(auto-fill,440px);
+	grid-gap: 35px 35px;
+`;
+
+const ItemCard= styled.div`
+	/* width: 440px;
+	height: 680px; */
+	/* border: 2px solid #1F54A5; */
+	/* border-image: linear-gradient(0deg, #5AD3C5, #1CB6CC) 10 10; */
+	/* background: linear-gradient(0deg, rgba(90, 211, 197,0.26) 0%, rgb(28, 182, 204,0.26) 99%); */
+	background: #203298;
+	/* border-radius: 10px; */
+	padding: 30px 20px;
+	/* margin: 35px; */
+	box-shadow: 0px 0px 20px rgb(0 0 0 / 20%);
+	position: relative;
+	&:hover{
+		/* border-color: #1EB7CC; */
+		background: #2839C1;
+		box-shadow: 0 0 28px -12px #000;
+		.jumpBtn{
+			background-image: url('/images/market/arrow-right-hover.png');
+		}
+		&::before{
+			background: #F86C29;
+		}
+	}
+	&::before{
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 4px;
+    	height: 466px;
+		background: #5C6CF2;
 	}
 `;
 
-const SubmitTxt = styled.span`
-    display: inline-block;
-    width:${(props) => props.width};;
-`
-
-const Container=styled.div`
-	padding: 50px 60px;
-	border-radius: 22px;
-	background: #203298;
-`
-
-const OperationBox=styled.div`
-	width: 100%;
-	text-align: right;
-`
-
-const TopBox=styled.div`
+const HeaderBox=styled.div`
 	display: flex;
-`
-const AllowSystemBox=styled.div`
-	flex:1;
-`
-const ASRow=styled.div`
-	display: flex;
-`
-const ASCol=styled.div`
-	flex: 1;
-	&:first-child{
-		margin-right: 60px;
-	}
-`
-const UploadAvatarBox=styled.div`
-	margin-left: 30px;
-	.label{
-		font-size: 18px;
-        font-weight: 400;
-        color: #DADDF7;
-        margin-bottom: 8px;
-        margin-left: 15px;
-	}
-`
-
-const AvatarWrap=styled.div`
-	width: 100%;
-	height: 234px;
-	background: #192987;
-	border-radius: 14px;
-	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	.avatarBox{
+		width: 122px;
+		height: 122px;
+		border: 2px dashed #49C8BA;
+		border-radius: 50%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 	.avatar{
-		height: 120px;
+		width: 104px;
+		height: 104px;
+		border-radius: 50%;
+	}
+	.name{
+		font-size: 18px;
+		text-align: center;
+		margin-top: 20px;
+	}
+	.desc{
+		text-align: center;
+		margin-top: 22px;
+	}
+`;
+
+const SplitLine =styled.div`
+	width: 100%;
+	height: 2px;
+	background: linear-gradient(251deg, #5AD2C5 0%, #20B9CD 100%);
+	border-radius: 1px;
+	margin-top: 17px;
+`
+const ItemContent=styled.div`
+	margin-top: 17px;
+	.row{
+		display: flex;
+		margin-bottom: 23px;
+		.label{
+			&::before{
+				content:'';
+				display: inline-block;
+				width: 10px;
+				height: 10px;
+				background: #F86C29;
+				border-radius: 50%;
+				margin-right: 10px;
+			}
+			font-size: 20px;
+		}
+		.val{
+			flex: 2;
+			width: 169px;
+			height: 35px;
+			line-height: 35px;
+			text-align:center;
+			background: rgba(7, 20, 92, 0.54);
+			margin-left: 30px;
+		}
+		.unit{
+			flex: 1;
+			height: 35px;
+			line-height: 35px;
+			text-align: center;
+		}
+		.payType{
+			height: 35px;
+			display: flex;
+			align-items: center;
+			margin-left: 30px;
+			.payImg{
+				width: auto;
+				height: 27px;
+				margin-right: 20px;
+			}
+		}
 	}
 `
 
-const UploadAvatarBtn=styled.div`
-	${btnCss};
-	margin-top: 20px;
+const JumpBtn=styled.div`
+	width: 66px;
+	height: 66px;
+	margin: 48px auto 0;
+	background-image: url('/images/market/arrow-right.png');
+	background-size: 100%;
+	cursor: pointer;
 `
 
-const SystemBtn=styled.div`
-	${btnCss};
-	margin-top: 70px;
-`
-
-const BottomBox=styled.div`
-	display: flex;
-	margin-top: 30px;
-`
-
-const HandleBtnGroup=styled.div`
-	margin-top: 75px;
-`
-const ItemBtn=styled.div`
-	${btnCss};
-	margin-bottom: 30px;
-`
-
-
-export default PendingOrder;
+export default Market;

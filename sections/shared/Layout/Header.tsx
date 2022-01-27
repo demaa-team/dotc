@@ -19,6 +19,7 @@ const Header: FC = () => {
 	const { showMobileSideNav, headerTitle, headerSubtitle } = UIContainer.useContainer();
 	const getRouterPath = useMemo(
 		() => {
+			console.log(router)
 			if(router.asPath){
 				const arr=router.asPath.split('/');
 				if(arr.length>=4){
@@ -55,7 +56,7 @@ const Header: FC = () => {
 					</MobileOrTabletView> */}
 					{
 						getRouterPath&&
-						<PageRouterShow>{getRouterPath}</PageRouterShow>
+						<PageRouterShow>{getRouterPath.replace('/','>')}</PageRouterShow>
 					}
 					<Sep />
 					<UserMenu />

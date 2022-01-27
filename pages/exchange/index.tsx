@@ -60,55 +60,37 @@ const Exchange: FC = () => {
 			},
 			{
 				Header: '操作',
-				accessor: 'progress',
+				accessor: 'action',
 			},
 		],
 		[]
 	)
 	const data = [
 		{
-			firstName: 'yhb',
-			lastName: 'good',
-			age: Math.floor(Math.random() * 30),
-			visits: Math.floor(Math.random() * 100),
-			progress: Math.floor(Math.random() * 100),
-			status: 'relationship',
+			firstName: '交易ID01',
+			lastName: '角色01',
+			age: '商品类型01',
+			visits:'货币类型01',
+			status1: '成交价格01',
+			status2: '成交数量01',
+			status3: '剩余确认时间01',
+			status: '状态01',
 			action:'handle'
 		},
 		{
-			firstName: 'yhb123',
-			lastName: 'good456',
-			age: Math.floor(Math.random() * 30),
-			visits: Math.floor(Math.random() * 100),
-			progress: Math.floor(Math.random() * 100),
-			status: 'relationship',
+			firstName: '交易ID02',
+			lastName: '角色02',
+			age: '商品类型02',
+			visits:'货币类型02',
+			status1: '成交价格02',
+			status2: '成交数量02',
+			status3: '剩余确认时间02',
+			status: '状态02',
 			action:'handle'
 		}
 	]
 
 	const tableCol=[
-		// {
-		// 	Header: '测试',
-		// 	accessor: 'address',
-		// 	width: 100,
-		// 	// sortable: true,
-		// 	// Cell: () => {
-		// 	// 	return (
-		// 	// 		<div>按钮</div>
-		// 	// 	)
-		// 	// },
-		// },
-		// {
-		// 	Header: '测试2',
-		// 	accessor: 'address2',
-		// 	width: 100,
-		// 	// sortable: true,
-		// 	Cell: () => {
-		// 		return (
-		// 			<div>按钮</div>
-		// 		)
-		// 	},
-		// },
 		{
 			Header: '交易ID',
 			accessor: 'firstName',
@@ -126,18 +108,18 @@ const Exchange: FC = () => {
 			Header: '货币类型',
 			accessor: 'visits',
 		},
-		// {
-		// 	Header: '成交价格',
-		// 	accessor: 'status1',
-		// },
-		// {
-		// 	Header: '成交数量',
-		// 	accessor: 'status2',
-		// },
-		// {
-		// 	Header: '剩余确认时间',
-		// 	accessor: 'status3',
-		// },
+		{
+			Header: '成交价格',
+			accessor: 'status1',
+		},
+		{
+			Header: '成交数量',
+			accessor: 'status2',
+		},
+		{
+			Header: '剩余确认时间',
+			accessor: 'status3',
+		},
 		{
 			Header: '状态',
 			accessor: 'status',

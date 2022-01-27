@@ -10,6 +10,9 @@ import ContactType from './components/contact-type';
 import Button from 'components/Button';
 import Upload from 'rc-upload';
 
+const Delete =require('./images/delete.png');
+const Edit=require('./images/edit.png')
+
 import UIContainer from 'containers/UI';
 
 const PendingOrder: FC = () => {
@@ -119,6 +122,11 @@ const PendingOrder: FC = () => {
 		},
 	}
 
+	const props = {
+		width: '24px',
+		height: '24px',
+	};
+
 	return (
 		<>
 			<Head>
@@ -128,9 +136,13 @@ const PendingOrder: FC = () => {
 			{/* <Deal /> */}
 			<Container>
 					<OperationBox>
-						<Button variant='text'>编辑</Button>
-						----
-						<Button variant='text'>删除</Button>
+						<Button variant='text'>
+							<img src={Edit} {...props}></img>
+						</Button>
+						&nbsp;&nbsp;
+						<Button variant='text'>
+							<img src={Delete} {...props}></img>
+						</Button>
 					</OperationBox>
 				<TopBox>
 					<AllowSystemBox>
