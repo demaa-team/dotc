@@ -147,25 +147,31 @@ const Exchange: FC = () => {
 		router.push('/exchange/detail/456');
 	}
 
-	const tableData=[
-		{
-			address:'ok',
-			address2:'12'
-		},{
-			address:'you',
-			address2:'16'
-		}
+	// 角色下拉框
+	const roleOptions = [
+		{ label: '角色1', value: '1' },
+		{ label: '角色2', value: '2' },
+		{ label: '角色3', value: '3' },
 	]
-	const options = [
-		{ label: 'eth', value: '1' },
-		{ label: 'usd', value: '2' },
-		{ label: 'otc', value: '3' },
+	// 商品类型
+	const productOptions = [
+		{ label: '商品1', value: '1' },
+		{ label: '商品2', value: '2' },
+		{ label: '商品3', value: '3' },
 	]
-	const colourOptions=[
-        { value: 'chocolate', label: 'Chocolate' },
-        { value: 'strawberry', label: 'Strawberry' },
-        { value: 'vanilla', label: 'Vanilla' }
-    ]
+	// 货币类型
+	const currencyOptions = [
+		{ label: '货币1', value: '1' },
+		{ label: '货币2', value: '2' },
+		{ label: '货币3', value: '3' },
+	]	
+	// 交易状态
+	const delOptions = [
+		{ label: '交易1', value: '1' },
+		{ label: '交易2', value: '2' },
+		{ label: '交易3', value: '3' },
+	]
+
 	const value = '1'
 	return (
 		<>
@@ -194,27 +200,27 @@ const Exchange: FC = () => {
 						/> */}
 						<Select
 							variant="outline"
-							options={colourOptions}
+							options={roleOptions}
 						/>
 					</SelectInput>
 
 					<SelectInput data-testid="select">
 						<Select
 							variant="outline"
-							options={colourOptions}
+							options={productOptions}
 						/>
 					</SelectInput>
 
 					<SelectInput data-testid="select">
 						<Select
 							variant="outline"
-							options={colourOptions}
+							options={currencyOptions}
 						/>
 					</SelectInput>
 					<SelectInput data-testid="select">
 						<Select
 							variant="outline"
-							options={colourOptions}
+							options={delOptions}
 						/>
 					</SelectInput>
 				</SelectWrap>

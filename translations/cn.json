@@ -99,6 +99,9 @@
 			},
 			"helper": "Follow the Metamask prompts to confirm your signature"
 		},
+		"market":{
+			"pledge-tool-tip":"交易者需要抵押相应资产才能交易，如果没有抵押品，可通过绑定可信验证源（电话等等）获得一次有限免抵押交易资格。免抵押交易者如若作恶将被永久取消交易资格！"
+		},
 		"wallet": {
 			"title": "connected wallet",
 			"copy-address": {

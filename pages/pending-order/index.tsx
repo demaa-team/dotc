@@ -38,10 +38,16 @@ const PendingOrder: FC = () => {
 		setRequestData({...requestData,[key]:{select:v,input:''}})
 	}
 
-	const options=[
-		{ value: 'chocolate', label: 'Chocolate' },
-		{ value: 'strawberry', label: 'Strawberry' },
-		{ value: 'vanilla', label: 'Vanilla' },
+	const priceOptions=[
+		{value:'1',label:'价格1'},
+		{value:'12',label:'价格12'},
+		{value:'13',label:'价格13'}
+	]
+
+	const goodsOptions = [
+		{value:'1',label:'商品1'},
+		{value:'12',label:'商品12'},
+		{value:'13',label:'商品13'}
 	]
 
 	const handleAdd=(type:string)=>{
@@ -155,16 +161,16 @@ const PendingOrder: FC = () => {
 								<SelectInput
 									label="价格"
 									name='price'
-									options={options}
+									options={priceOptions}
 									onInputChange={handleSelectInputChange}
 									selectVal={requestData.price.select}
 									inputVal={requestData.price.input}
 									onSelectChange={handleSelectChange}
 								></SelectInput>
 								<SelectInput
-									label="价格"
+									label="商品"
 									name='goods'
-									options={options}
+									options={goodsOptions}
 									onInputChange={handleSelectInputChange}
 									selectVal={requestData.goods.select}
 									inputVal={requestData.goods.input}

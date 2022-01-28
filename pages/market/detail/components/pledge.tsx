@@ -85,9 +85,8 @@ const Pledge:FC<PropsType>=({onSelectChange})=>{
                 <div className="help">
                     <Tooltip
                         arrow={true}
-                        placement="bottom"
-                        content={                            t('modals.wallet.copy-address.copy-to-clipboard')
-                    }
+                        placement="top"
+                        content={ t('modals.market.pledge-tool-tip')}
                     >
                         <CopyClipboardContainer>
                         <Img className='questionIcon' src={HelpIcon}/>

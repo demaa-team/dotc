@@ -47,6 +47,9 @@
 			"description": "You need to settle before being able to stake your {{stakedAsset}}.",
 			"button": "SETTLE {{stakedAsset}}"
 		},
+		"market":{
+			"pledge-tool-tip":"Traders are required to pledge the corresponding assets in order to trade. If there is no collateral, they can obtain a limited collateral free trade qualification by binding to a trusted verification source (telephone, etc.). Mortgage free traders will be permanently disqualified from trading if they do anything wrong!"
+		},
 		"confirm-transaction": {
 			"title": "Confirm Transaction",
 			"approve": {
