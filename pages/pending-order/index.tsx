@@ -1,4 +1,4 @@
-import { FC, useEffect,useState } from 'react';
+import { FC, useEffect,useState,useMemo } from 'react';
 import Head from 'next/head';
 import styled,{css} from 'styled-components';
 import { useTranslation } from 'react-i18next';
@@ -9,6 +9,9 @@ import SelectInput from './components/select-input';
 import ContactType from './components/contact-type';
 import Button from 'components/Button';
 import Upload from 'rc-upload';
+import {
+	CURRENCY,
+} from 'constants/order';
 
 const Delete =require('./images/delete.png');
 const Edit=require('./images/edit.png')
@@ -49,6 +52,12 @@ const PendingOrder: FC = () => {
 		{value:'12',label:'商品12'},
 		{value:'13',label:'商品13'}
 	]
+	// const options=[
+	// 	{ value: 'chocolate', label: 'Chocolate' },
+	// 	{ value: 'strawberry', label: 'Strawberry' },
+	// 	{ value: 'vanilla', label: 'Vanilla' },
+	// ]
+	const options=useMemo(() => CURRENCY.map((value) => ({ label: value, value })), []);
 
 	const handleAdd=(type:string)=>{
 		if(type==='contact'){
@@ -141,15 +150,17 @@ const PendingOrder: FC = () => {
 			{/* <NoWallet /> */}
 			{/* <Deal /> */}
 			<Container>
-					<OperationBox>
-						<Button variant='text'>
-							<img src={Edit} {...props}></img>
-						</Button>
-						&nbsp;&nbsp;
-						<Button variant='text'>
-							<img src={Delete} {...props}></img>
-						</Button>
-					</OperationBox>
+				{
+					false && <OperationBox>
+					<Button variant='text'>
+						<img src={Edit} {...props}></img>
+					</Button>
+					&nbsp;&nbsp;
+					<Button variant='text'>
+						<img src={Delete} {...props}></img>
+					</Button>
+				</OperationBox>
+				}
 				<TopBox>
 					<AllowSystemBox>
 						<ASRow>
@@ -161,7 +172,7 @@ const PendingOrder: FC = () => {
 								<SelectInput
 									label="价格"
 									name='price'
-									options={priceOptions}
+									options={options}
 									onInputChange={handleSelectInputChange}
 									selectVal={requestData.price.select}
 									inputVal={requestData.price.input}
@@ -170,7 +181,7 @@ const PendingOrder: FC = () => {
 								<SelectInput
 									label="商品"
 									name='goods'
-									options={goodsOptions}
+									options={options}
 									onInputChange={handleSelectInputChange}
 									selectVal={requestData.goods.select}
 									inputVal={requestData.goods.input}

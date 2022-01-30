@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import { useRouter } from 'next/router';
+import Pagination from 'components/Table/Pagination'
 import styled from 'styled-components';
 import WeiXinImg from 'public/images/market/weixin.png';
 import PayPalImg from 'public/images/market/paypal.png';
@@ -37,6 +38,37 @@ const Market = () => {
 	const handleJumpDetail=()=>{
 		router.push('/market/detail/123');
 	}
+
+	const [pageIndex,setPageIndex] = useState(0)
+	const [pageCount,setPageCount] = useState(20)
+	const [canNextPage,setCanNextPage] = useState(true)
+	const [canPreviousPage,setCanPreviousPage]=useState(false)
+	const gotoPage=(page:number)=>{
+		setPageIndex(page)
+	}
+
+	const previousPage=()=>{
+		setPageIndex(pageIndex-1)
+	}
+
+	const nextPage=()=>{
+		setPageIndex(pageIndex+1)
+	}
+
+
+	useEffect(() => {
+		if(pageIndex===0){
+			setCanPreviousPage(false)
+		}else{
+			setCanPreviousPage(true)
+		}
+		if(pageIndex === pageCount-1){
+			setCanNextPage(false)
+		}else{
+			setCanNextPage(true)
+		}
+	},[pageIndex])
+
 	return (
 		<>
 			<Head>
@@ -44,7 +76,7 @@ const Market = () => {
 			</Head>
 			<Container>
 				{
-					[1,2,3,4,5,6,7,8,9,10].map(v=>
+					[1,2,3,4,5,6].map(v=>
 						<ItemCard key={v}>
 							<HeaderBox>
 								<div className="avatarBox">
@@ -76,8 +108,18 @@ const Market = () => {
 						</ItemCard>
 					)
 				}
-				
 			</Container>
+			<PaginationBox>
+				<Pagination
+					pageIndex={pageIndex}
+					pageCount={pageCount}
+					canNextPage={canNextPage}
+					canPreviousPage={canPreviousPage}
+					setPage={gotoPage}
+					previousPage={previousPage}
+					nextPage={nextPage}
+				/>
+			</PaginationBox>
 		</>
 	);
 };
@@ -164,6 +206,12 @@ const SplitLine =styled.div`
 	border-radius: 1px;
 	margin-top: 17px;
 `
+
+const PaginationBox=styled.div`
+	width: 100%;
+	padding-right: 20%;
+`
+
 const ItemContent=styled.div`
 	margin-top: 17px;
 	.row{

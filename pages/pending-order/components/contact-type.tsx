@@ -5,36 +5,74 @@ import { useTranslation } from 'react-i18next';
 import TextInput from 'components/Input/TextInput';
 import Select from 'components/Select';
 import Button from 'components/Button';
+import Img, { Svg } from 'react-optimized-image';
 
 import UIContainer from 'containers/UI';
-interface PropsType{
-    label:string,
-    onInputChange:(v:string,i:number)=>void,
-    onSelectChange:(v:any,i:number)=>void,
-    list:any,
-    selectOptions:any[],
-    onAdd:()=>void,
-    onRemove:(i:number)=>void,
+
+import WhatsappIcon from 'assets/order/whatsapp.png';
+import LineIcon from 'assets/order/line.png';
+import PhoneIcon from 'assets/order/phone.png';
+import TgIcon from 'assets/order/telegram.png';
+import OtherIcon from 'assets/order/other.png';
+
+
+interface PropsType {
+    label: string,
+    onInputChange: (v: string, i: number) => void,
+    onSelectChange: (v: any, i: number) => void,
+    list: any,
+    onAdd: () => void,
+    onRemove: (i: number) => void,
 }
-const ContactType: FC<PropsType> = ({list,label,onInputChange,onSelectChange,onAdd,onRemove,selectOptions}) => {
-	const { t,i18n } = useTranslation();
-    const options:any[] = []
-    selectOptions.forEach(i=>{
-        const item = {
-            value:i.value,
-            label:i[i18n.language]
+const LABEL_ICON_MAP={
+    'whatsapp':WhatsappIcon,
+    'line':LineIcon,
+    'phone':PhoneIcon,
+    'telegram':TgIcon,
+    'other':OtherIcon
+}
+
+const OptionLabel=(props:any)=>{
+    return <OptionLabelWrap>
+        {/* @ts-ignore */}
+        <img className='icon' src={LABEL_ICON_MAP[props.value]} />
+        <div className="name">{props.label}</div>
+    </OptionLabelWrap>
+}
+
+const ContactType: FC<PropsType> = ({ list, label, onInputChange, onSelectChange, onAdd, onRemove }) => {
+    const { t } = useTranslation();
+    const options = [
+        { 
+            value: 'whatsapp', label: 'whatsapp'
+        },{
+            value: 'phone', label: 'phone'
+        },{
+            value: 'line', label: 'line'
+        },{
+            value: 'telegram', label: 'telegram'
+        },{
+            value: 'other', label: 'other'
         }
-        options.push(item)
-    })
-	return (
-		<Wrapper>
+    ]
+    return (
+        <Wrapper>
             <div className="label">{label}</div>
             {
-                list.map((v:any,index:number)=>
+                list.map((v: any, index: number) =>
                     <RowWrap key={index}>
-                        <Select variant="outline" value={v.method} options={options} className='select' onChange={(e)=>onSelectChange(e,index)}></Select>
-                        <TextInput value={v.input} placeholder='请输入' onChange={(e)=>onInputChange(e.target.value,index)} className='input'></TextInput>
-                        <RemoveBtn onClick={()=>onRemove(index)} isForbid={list.length===1}></RemoveBtn>
+                        <Select
+                            variant="outline"
+                            value={v.select}
+                            formatOptionLabel={(option) => (
+                                <OptionLabel {...option}/>
+                            )}
+                            options={options}
+                            className='select'
+                            onChange={(e) => onSelectChange(e, index)}
+                        ></Select>
+                        <TextInput value={v.input} placeholder='请输入' onChange={(e) => onInputChange(e.target.value, index)} className='input'></TextInput>
+                        <RemoveBtn onClick={() => onRemove(index)} isForbid={list.length === 1}></RemoveBtn>
                     </RowWrap>
                 )
             }
@@ -42,9 +80,9 @@ const ContactType: FC<PropsType> = ({list,label,onInputChange,onSelectChange,onA
                 <SubmitTxt width='38.9vw'>+</SubmitTxt>
             </Button>
         </Wrapper>
-	);
+    );
 };
-const btnCss=css`
+const btnCss = css`
     height: 54px;
 	line-height: 54px;
 	text-align: center;
@@ -55,13 +93,7 @@ const btnCss=css`
 		background: #F86C29;
 	}
 `
-
-const SubmitTxt = styled.span`
-    display: inline-block;
-    width:${(props) => props.width};;
-`
-
-const Wrapper=styled.div`
+const Wrapper = styled.div`
     margin-right: 60px;
     flex: 1;
     &:last-child{
@@ -86,19 +118,19 @@ const Wrapper=styled.div`
     .select{
         flex: 1;
         min-width: 120px;
-        height: 66px;
+        height: 50px;
         border: 2px solid #2643E8;
         /* opacity: 0.47; */
         border-radius: 11px;
         .react-select__control{
             border: none;
-            height: 60px;
+            height: 44px;
             border-radius: 11px;
         }
     }
 `
 
-const RowWrap=styled.div`
+const RowWrap = styled.div`
 	display: flex;
     margin-bottom: 10px;
     &:last-child{
@@ -107,7 +139,7 @@ const RowWrap=styled.div`
     .input{
         flex: 3;
         margin-left: 14px;
-        height: 66px;
+        height: 50px;
         border: 2px solid #2643E8;
         opacity: 0.47;
         border-radius: 11px;
@@ -120,20 +152,41 @@ const RowWrap=styled.div`
         }
     }
 `
-const RemoveBtn=styled.div<{isForbid?:boolean}>`
-    cursor: ${(props)=>props.isForbid?'not-allowed':'pointer'};
+const RemoveBtn = styled.div<{ isForbid?: boolean }>`
+    cursor: ${(props) => props.isForbid ? 'not-allowed' : 'pointer'};
     flex: none;
     width: 46px;
-    height: 66px;
+    height: 50px;
     background: url('/images/pending-order/reduce-icon.png') no-repeat center;
     background-size: 30px 30px;
 
 `
 
-const IncreaseBtn=styled.div`
+const SubmitTxt = styled.span`
+    display: inline-block;
+    width:${(props) => props.width};;
+`
+
+const IncreaseBtn = styled.div`
     ${btnCss}
     font-size: 32px;
     font-weight: bold;
     user-select: none;
 `
+
+const OptionLabelWrap=styled.div`
+    display: flex;
+    align-items: center;
+    width: 100%;
+    .name{
+        color: ${(props) => props.theme.colors.white};
+	    font-family: ${(props) => props.theme.fonts.condensedBold};
+    }
+    .icon{
+        width: 24px;
+        height: 24px;
+        margin-right: 8px;
+    }
+`
+
 export default ContactType;

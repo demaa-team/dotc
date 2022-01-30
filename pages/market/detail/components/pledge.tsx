@@ -165,7 +165,7 @@ const ModalFooter=styled.div`
 
 const GetVerifyCodeBtn=styled.div<{isForbid:boolean}>`
     width: 120px;
-    height: 50px;
+    height: 48px;
     line-height: 50px;
     flex: none;
     background: #5473E8;
@@ -175,8 +175,8 @@ const GetVerifyCodeBtn=styled.div<{isForbid:boolean}>`
     border-radius: 0 10px 10px 0;
     cursor: ${(props)=>props.isForbid?'not-allowed':'pointer'};
     position: absolute;
-    bottom: 9px;
-    right: 9px;
+    bottom: 1px;
+    right: 2px;
 `
 
 // 最大和最小公共样式

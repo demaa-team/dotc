@@ -88,7 +88,7 @@ const ArrowButton = styled.button`
 		color: ${(props) => props.theme.colors.white};
 	}
 	&[disabled] {
-		cursor: default;
+		cursor: not-allowed;
 		svg {
 			color: ${(props) => props.theme.colors.white};
 		}

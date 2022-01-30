@@ -1,8 +1,28 @@
 import React,{useMemo, useState} from 'react';
 import styled from 'styled-components';
 import Img from 'react-optimized-image';
+import Button from 'components/Button';
+import Upload from 'rc-upload';
 
 const Evidence=()=>{
+    const UploadProps={
+		action: () => {
+			return new Promise(resolve => {
+			  setTimeout(() => {
+				resolve('/upload.do');
+			  }, 2000);
+			});
+		},
+		onStart(file:any) {
+			console.log('onStart', file, file.name);
+		},
+		onSuccess(ret:any) {
+			console.log('onSuccess', ret);
+		},
+		onError(err:any) {
+			console.log('onError', err);
+		},
+	}
     return (
         <Container>
             <ImgWrapper>
@@ -10,9 +30,16 @@ const Evidence=()=>{
             </ImgWrapper>
 
 
-            <SubmitBtn>
+            <Upload {...UploadProps}>
+                <div style={{marginTop:'10px'}}>
+                    <Button variant="primary" size='sm'>
+                        <SubmitTxt width='160px'>提交证据</SubmitTxt>
+                    </Button>
+                </div>
+            </Upload>
+            {/* <SubmitBtn>
                 提交证据
-            </SubmitBtn>
+            </SubmitBtn> */}
         </Container>
     )
 }
@@ -30,6 +57,11 @@ const ImgWrapper=styled.div`
         width: 66px;
         height: auto;
     }
+`
+
+const SubmitTxt = styled.span`
+    display: inline-block;
+    width:${(props) => props.width};
 `
 
 const SubmitBtn=styled.div`

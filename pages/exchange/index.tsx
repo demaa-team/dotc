@@ -132,11 +132,11 @@ const Exchange: FC = () => {
 					<>
 						<div className="handleBtnGroup">
 							<div className="btn" onClick={handleBtnCLick}>确认</div>
-							<div className="btn" onClick={handleBtnCLick}>取消</div>
+							<div className="btn disabledBtn" onClick={handleBtnCLick}>取消</div>
 						</div>
 						<div className="handleBtnGroup">
-							<div className="btn" onClick={handleBtnCLick}>仲裁</div>
-							<div className="btn" onClick={handleBtnCLick}>辩护</div>
+							<div className="btn disabledBtn" onClick={handleBtnCLick}>仲裁</div>
+							<div className="btn disabledBtn" onClick={handleBtnCLick}>辩护</div>
 						</div>
 					</>
 				)
@@ -225,12 +225,6 @@ const Exchange: FC = () => {
 					</SelectInput>
 				</SelectWrap>
 				
-				{/* <Styles>
-					<Table
-						columns={columns}
-						data={data}
-					/>
-				</Styles> */}
 				<Styles>
 					<TableCom
 						palette="primary"
@@ -307,6 +301,13 @@ const Styles = styled.div`
 			}
 			&:hover{
 				color: #F86C29;
+			}
+		}
+		.disabledBtn{
+			cursor: not-allowed;
+			color:#9195a3;
+			&:hover{
+				color: #9195a3;
 			}
 		}
 	}

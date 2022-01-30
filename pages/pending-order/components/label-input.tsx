@@ -46,7 +46,7 @@ const Wrapper=styled.div`
         }
     }
     .input{
-        height: 66px;
+        height: 50px;
         border: 2px solid #2643E8;
         opacity: 0.47;
         border-radius: 11px;

@@ -1,0 +1,1 @@
+export const CURRENCY: Array<string> = ['sUSD', 'sETH', 'sBTC'];
