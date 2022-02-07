@@ -15,14 +15,21 @@ import { useRouter } from 'next/router';
 
 const Header: FC = () => {
 	const router = useRouter();
-	const { t } = useTranslation();
+	const { t,i18n } = useTranslation();
+	const language = i18n.language
 	const { showMobileSideNav, headerTitle, headerSubtitle } = UIContainer.useContainer();
 	const getRouterPath = useMemo(
 		() => {
-			console.log(router)
 			if(router.asPath){
 				const arr=router.asPath.split('/');
 				if(arr.length>=4){
+					if(language === 'cn'){
+						if(arr[1] === 'market'){
+							return '市场'+'/'+arr[arr.length-1]
+						}else{
+							return '交易'+'/'+arr[arr.length-1]
+						}
+					}
 					return arr[1]+'/'+arr[arr.length-1];
 				}else{
 					return false;
@@ -56,7 +63,7 @@ const Header: FC = () => {
 					</MobileOrTabletView> */}
 					{
 						getRouterPath&&
-						<PageRouterShow>{getRouterPath.replace('/','>')}</PageRouterShow>
+						<PageRouterShow>{getRouterPath.replace('/',' > ')}</PageRouterShow>
 					}
 					<Sep />
 					<UserMenu />
@@ -110,7 +117,11 @@ const Sep = styled.div`
 `;
 
 const PageRouterShow=styled.div`
-	padding-left: 316px;
+	margin-left: 316px;
+    background: #203298;
+    padding: 10px;
+    border-radius: 6px;
+	/* background: #203298; */
 `
 
 export default Header;

@@ -124,7 +124,7 @@ const Detail = () => {
 };
 
 const Container = styled.div`
-	padding: 26px;
+	padding: 0px 26px;
 	display: flex;
 	flex-wrap: wrap;
 `;
@@ -135,11 +135,13 @@ const PledgeWrap = styled.div`
 
 const LeftBox=styled.div`
 	flex: 1;
+	padding:26px 0px;
 `
 
 const RightBox=styled.div`
 	flex: 1;
 	margin-left: 26px;
+	padding:26px 0px;
 `
 const BtnBox=styled.div`
 	width: 100%;

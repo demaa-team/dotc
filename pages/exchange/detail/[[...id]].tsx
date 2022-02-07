@@ -21,7 +21,7 @@ const Detail = () => {
     const [arbitrationModal,setArbitrationModal]=useState(false);
     const [arbitrationHistoryModal,setArbitrationHistoryModal]=useState(false);
 
-	const listData=[
+	const listDataFrist=[
         {
             key:'1',
             list:[
@@ -65,7 +65,11 @@ const Detail = () => {
                     val:'980'
                 }
             ]
-        },{
+        }
+    ]
+
+    const listDataSecond=[
+        {
             key:'3',
             list:[
                 {
@@ -104,6 +108,7 @@ const Detail = () => {
             ]
         }
     ]
+
 	return (
 		<>
 			<Head>
@@ -111,11 +116,17 @@ const Detail = () => {
 			</Head>
 			<Container>
                 {
-                    listData.map((v,i)=>
-                        <DetailCard key={v.key} list={v.list} isLast={i===listData.length-1} showHistory={setArbitrationHistoryModal}></DetailCard>
+                    listDataFrist.map((v,i)=>
+                        <DetailCard key={v.key} isLast={false} list={v.list} showHistory={setArbitrationHistoryModal}></DetailCard>
                     )
                 }
-
+			</Container>
+            <Container>
+                {
+                    listDataSecond.map((v,i)=>
+                        <DetailCard key={v.key} list={v.list} isLast={i===listDataSecond.length-1} showHistory={setArbitrationHistoryModal}></DetailCard>
+                    )
+                }
 			</Container>
             <HandleBtnGroup>
                 <Button variant="primary" size='xl'>
@@ -158,9 +169,27 @@ const Detail = () => {
                     <MDesc>
                         仲裁记录
                     </MDesc>
+                    <ArbitrationRecords>
+                    {
+                            [1,2,3,4].map(v=>
+                                <ImgWrapper key={v}>
+                                    <img className='img' src="http://m.imeitou.com/uploads/allimg/2016062920/ke4rrvvmx5g.jpg"/>
+                                </ImgWrapper>
+                            )
+                        }
+                    </ArbitrationRecords>
                     <MDesc>
                         申诉记录
                     </MDesc>
+                    <ArbitrationRecords>
+                    {
+                            [1,2,3,4].map(v=>
+                                <ImgWrapper key={v}>
+                                    <img className='img' src="http://m.imeitou.com/uploads/allimg/2016062920/ke4rrvvmx5g.jpg"/>
+                                </ImgWrapper>
+                            )
+                        }
+                    </ArbitrationRecords>
                     <BtnBox>
                         <Button variant="primary" size='xl' onClick={()=>setArbitrationHistoryModal(false)}>
                             <SubmitTxt width='100%'>取消</SubmitTxt>
@@ -176,11 +205,22 @@ const Detail = () => {
 
 const Container = styled.div`
 	padding: 26px;
-	display: grid;
-    justify-content: center;
-    grid-template-columns: repeat(auto-fill, 760px);
-    grid-column-gap: 26px;
-    grid-row-gap: 22px;
+	display: flex;
+    justify-content: space-around;
+    width: 100%;
+    >div{
+        width: 49%;
+       >div{
+        margin-right: 1%;
+        margin-bottom: 32px;
+        >div{
+            width: 50%;
+            overflow: hidden;
+            text-overflow:ellipsis;
+            white-space: nowrap;
+        }
+       }
+    }
 `;
 
 const SubmitTxt = styled.span`
@@ -225,7 +265,8 @@ const MDesc=styled.div`
     font-weight: 400;
     color: #FFFFFF;
     line-height: 29px;
-    margin-top: 54px;
+    margin-top: 30px;
+    margin-bottom: 10px;
     padding: 0 35px;
 `
 const EvidenceList=styled.div`
@@ -240,6 +281,18 @@ const BtnBox=styled.div`
     width: 100%;
     text-align: right;
     margin-top: 10px;
+`
+
+const ArbitrationRecords=styled.div`
+    display: flex;
+    justify-content: space-between;
+`
+
+const ImgWrapper=styled.div`
+    width: 24%;
+    img{
+        height:120px
+    }
 `
 
 const StyledBaseModal = styled(BaseModal)`

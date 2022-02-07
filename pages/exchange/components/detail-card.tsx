@@ -12,8 +12,8 @@ const DetailCard:FC<{list:any,isLast:boolean,showHistory:any}> = ({list,isLast,s
             {
                 list.map((v:any,index:number)=>
                     <ItemBoxWrap key={index}>
-                        <LeftBox>{v.label}</LeftBox>
-                        <RightBox>{v.val}</RightBox>
+                        <LeftBox title={v.label}>{v.label}</LeftBox>
+                        <RightBox title={v.val}>{v.val}</RightBox>
                     </ItemBoxWrap>
                 )
             }
@@ -29,12 +29,9 @@ const Container=styled.div`
     min-height: 360px;
     background: #203298;
     border-radius: 13px;
-    display: grid;
-    grid-template-columns: 300px 300px;
-    grid-template-rows: 50px 50px;
-    grid-row-gap: 50px;
-    grid-column-gap: 50px;
+    display: flex;
     align-content: center;
+    flex-wrap: wrap;
 `
 
 const LinkBox=styled.div`
@@ -50,10 +47,10 @@ const ItemBoxWrap=styled.div`
     /* background: gray; */
     display: flex;
     border-radius: 8px;
+    width: 49%;
 `
 
 const LeftBox=styled.div`
-    min-width: 144px;
     line-height: 50px;
     background: #6D83FF;
     text-align: center;

@@ -77,7 +77,7 @@ const ContactType: FC<PropsType> = ({ list, label, onInputChange, onSelectChange
                 )
             }
             <Button variant="primary" size='xl'  onClick={onAdd}>
-                <SubmitTxt width='38.9vw'>+</SubmitTxt>
+                <SubmitTxt width='100%'>+</SubmitTxt>
             </Button>
         </Wrapper>
     );

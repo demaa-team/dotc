@@ -257,6 +257,7 @@ const SelectWrap=styled.div`
 `
 
 const Styles = styled.div`
+	width: 100%;
 	table {
 		width: 100%;
 		border-spacing: 0;
@@ -287,8 +288,19 @@ const Styles = styled.div`
 		}
 	}
 	.table-row{
-		background: #192987;
-		/* height: 100px; */
+		>div{
+			background: #192987;
+		}
+	}
+	.table-body-row{
+		border-bottom: unset;
+	}
+	.table-body-cell{
+		border-bottom: 1px solid #515FAF;
+	}
+	.table-body{
+		overflow-x: unset;
+		overflow-y: unset;
 	}
 	.handleBtnGroup{
 		&:last-child{
@@ -308,6 +320,13 @@ const Styles = styled.div`
 			color:#9195a3;
 			&:hover{
 				color: #9195a3;
+			}
+		}
+	}
+	.table-body-row{
+		:last-child{
+			.table-body-cell{
+				border-bottom: unset;
 			}
 		}
 	}

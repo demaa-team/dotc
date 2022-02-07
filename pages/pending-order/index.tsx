@@ -190,11 +190,11 @@ const PendingOrder: FC = () => {
 							</ASCol>
 						</ASRow>
 						<LabelInput label='认证信息' name='auth' val={requestData.auth} onChange={handleNameChange}></LabelInput>
-						<div style={{marginTop:'50px'}}>
+						<Approval>
 							<Button variant="primary" size='xl'>
-								<SubmitTxt width='64.3vw'>批准系统转款</SubmitTxt>
+								<SubmitTxt width='100%'>批准系统转款</SubmitTxt>
 							</Button>
-						</div>
+						</Approval>
 					</AllowSystemBox>
 					<UploadAvatarBox>
 						<div className="label">头像</div>
@@ -203,9 +203,9 @@ const PendingOrder: FC = () => {
 						</AvatarWrap>
 						{/* @ts-ignore */}
 						<Upload {...UploadProps}>
-							<div style={{marginTop:'50px'}}>
-								<Button variant="primary" size='xl'>
-									<SubmitTxt width='14.6vw'>上传头像</SubmitTxt>
+							<div style={{marginTop:'50px',width:'100%'}}>
+								<Button variant="primary" size='xl' style={{width:'100%'}}>
+									<SubmitTxt width='100px'>上传头像</SubmitTxt>
 								</Button>
 							</div>
 						</Upload>
@@ -235,7 +235,7 @@ const PendingOrder: FC = () => {
 
 				<HandleBtnGroup>
 					<Button variant="primary" size='xl'>
-						<SubmitTxt width='81vw'>开&nbsp;&nbsp;&nbsp;&nbsp;单</SubmitTxt>
+						<SubmitTxt width='100%'>开&nbsp;&nbsp;&nbsp;&nbsp;单</SubmitTxt>
 					</Button>
 					{/* <ItemBtn>开&nbsp;&nbsp;&nbsp;&nbsp;单</ItemBtn>
 					<ItemBtn>编&nbsp;&nbsp;&nbsp;&nbsp;辑</ItemBtn>
@@ -276,21 +276,35 @@ const OperationBox=styled.div`
 
 const TopBox=styled.div`
 	display: flex;
+	width:100%;
 `
 const AllowSystemBox=styled.div`
+	width:78%;
 	flex:1;
 `
 const ASRow=styled.div`
 	display: flex;
+	width: 100%;
 `
+
+const Approval=styled.div`
+	margin-top: 30px;
+	width: 100%;
+	button{
+		width: 100%;
+	}
+`
+
 const ASCol=styled.div`
+	width: 47.5%;
 	flex: 1;
 	&:first-child{
-		margin-right: 60px;
+		margin-right: 5%;
 	}
 `
 const UploadAvatarBox=styled.div`
-	margin-left: 30px;
+	margin-left: 2%;
+	width:20%;
 	.label{
 		font-size: 18px;
         font-weight: 400;
@@ -326,10 +340,21 @@ const SystemBtn=styled.div`
 const BottomBox=styled.div`
 	display: flex;
 	margin-top: 30px;
+	width: 100%;
+	>div{
+		width: 47.5%;
+		>button{
+			width: 100%;
+		}
+	}
 `
 
 const HandleBtnGroup=styled.div`
 	margin-top: 75px;
+	width: 100%;
+	>button{
+		width: 100%;
+	}
 `
 const ItemBtn=styled.div`
 	${btnCss};
