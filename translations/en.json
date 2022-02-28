@@ -3,24 +3,26 @@
 		"en": "English"
 	},
 	"pending-order":{
-		"page-title": "DOTC | Order"
+		"page-title": "C2C | Order"
 	},
 	"market":{
-		"page-title": "DOTC | Market",
+		"page-title": "C2C | Orders",
 		"detail":{
-			"page-title": "MARKET | Detail"
+			"page-title": "MARKET | Detail",
+			"left-label":"Buy ",
+			"insufficient-label": "insufficient collateral to buy",
+			"approve-label": "APPROVE <0>{{collateralAsset}}</0>",
+			"buy-label": "BUY <0>{{sellAsset}}</0>",
+			"cratio-label": "CRatio",
+			"fee-label": "Fee Ratio"
 		}
 	},
 	"exchange":{
-		"page-title": "DOTC | Exchange",
+		"page-title": "C2C | Deals",
 		"detail":{
-			"page-title": "EXCHANGE | Detail"
+			"page-title": "Deal | Detail"
 		}
 	},
-
-
-	
-
 
 	"meta": {
 		"description": "A dApp for DEM holders to earn rewards through staking.",
@@ -48,7 +50,7 @@
 			"button": "SETTLE {{stakedAsset}}"
 		},
 		"market":{
-			"pledge-tool-tip":"Traders are required to pledge the corresponding assets in order to trade. If there is no collateral, they can obtain a limited collateral free trade qualification by binding to a trusted verification source (telephone, etc.). Mortgage free traders will be permanently disqualified from trading if they do anything wrong!"
+			"pledge-tool-tip":"Traders are required to pledge the corresponding assets in order to trade. If there is no collateral, one can obtain a limited collateral free trade qualification by binding to a trusted verification source (telephone, etc.).If a trader commits evil, the binding address will be permanently banned from trading." 
 		},
 		"confirm-transaction": {
 			"title": "Confirm Transaction",

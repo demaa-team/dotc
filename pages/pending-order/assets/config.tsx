@@ -1,3 +1,5 @@
+import { FC, useEffect, useState } from 'react';
+
 export const ContactSelectOptions = [
     {
         value:'1',
@@ -45,3 +47,9 @@ export const PaySelectOptions = [
         en:'other'
     }
 ]
+
+export const Config = ()=>{
+    return <></>;
+}
+
+export default Config;

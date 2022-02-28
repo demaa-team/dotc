@@ -1,178 +1,260 @@
-import React, { FC, useEffect, useMemo } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import Head from 'next/head';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 // import Table from 'components/Table';
 // import Table from 'components/Table';
 import Table from './components/table';
+import useSynthetixQueries from 'demaa-queries';
 
 import TableCom from './components/tableCom'
 
 import UIContainer from 'containers/UI';
+import Connector from 'containers/Connector';
+
 // import Select from './components/select';
 import Select from 'components/Select';
 import Currency from 'components/Currency';
 import { useRouter } from 'next/router';
+import useDealHistoryQuery from "queries/otc/subgraph/useDealHistoryQuery";
+import { useRecoilState, useRecoilValue } from 'recoil';
+import TxConfirmationModal from 'sections/shared/modals/TxConfirmationModal';
+import {
+	FormContainer,
+	InputsContainer,
+	InputsDivider,
+	SettingsContainer,
+	SettingContainer,
+	ErrorMessage,
+	TxModalContent,
+	TxModalItem,
+	TxModalItemSeperator,
+} from 'sections/otc/common';
+import { appReadyState } from 'store/app';
+import { walletAddressState, isWalletConnectedState, networkState } from 'store/wallet';
+import QUERY_KEYS from 'constants/queryKeys';
+import { BigNumber } from 'ethers';
+import {GAS_LIMIT, GAS_PRICE, formatTimeLeft, DEAL_EXPIRED} from "queries/otc/subgraph/utils";
 
 const Exchange: FC = () => {
 	const router = useRouter();
 	const { t } = useTranslation();
 	const { setTitle } = UIContainer.useContainer();
+	const dealQuery = useDealHistoryQuery();
+	let deals = dealQuery.isSuccess?dealQuery.data:[];
+	const walletAddress = useRecoilValue(walletAddressState);
+	const {useSynthetixTxn, useContractTxn } = useSynthetixQueries();
+	const [dealID, setDealID] = useState<BigNumber>(BigNumber.from(0));
+	const [actionState, setActionState] = useState<string>("");
+	const [txModalOpen, setTxModalOpen] = useState<boolean>(false);
 
 	// header title
 	useEffect(() => {
 		setTitle('staking', 'earn');
 	}, [setTitle]);
 
-	const columns = useMemo(
-		() => [
-			{
-				Header: '交易ID',
-				accessor: 'firstName',
-			},
-			{
-				Header: '角色',
-				accessor: 'lastName',
-			},
-			{
-				Header: '商品类型',
-				accessor: 'age',
-			},
-			{
-				Header: '货币类型',
-				accessor: 'visits',
-			},
-			{
-				Header: '成交价格',
-				accessor: 'status1',
-			},
-			{
-				Header: '成交数量',
-				accessor: 'status2',
-			},
-			{
-				Header: '剩余确认时间',
-				accessor: 'status3',
-			},
-			{
-				Header: '状态',
-				accessor: 'status',
-			},
-			{
-				Header: '操作',
-				accessor: 'action',
-			},
-		],
-		[]
-	)
-	const data = [
-		{
-			firstName: '交易ID01',
-			lastName: '角色01',
-			age: '商品类型01',
-			visits:'货币类型01',
-			status1: '成交价格01',
-			status2: '成交数量01',
-			status3: '剩余确认时间01',
-			status: '状态01',
-			action:'handle'
-		},
-		{
-			firstName: '交易ID02',
-			lastName: '角色02',
-			age: '商品类型02',
-			visits:'货币类型02',
-			status1: '成交价格02',
-			status2: '成交数量02',
-			status3: '剩余确认时间02',
-			status: '状态02',
-			action:'handle'
+	deals = deals??[];
+
+	const timePromt = (t):string =>{
+		const left = (t + DEAL_EXPIRED) - Date.now();
+		if(left <= 0){
+			return 'Expired';
 		}
-	]
+		return formatTimeLeft(left);
+	};
+
+	const data = useMemo(()=> deals.map(d=>({
+		dealID: d.dealID,
+		role: walletAddress === d.maker?"Maker":"Taker",
+		coinType: d.coinCode,
+		currencyType: d.currencyCode,
+		uint: Number(d.price).toFixed(2),
+		amount: d.amount,
+		fee:Number(d.fee).toFixed(2),
+		payment: (Number(d.price) * Number(d.amount)).toFixed(2),
+		remainingTime: timePromt(d.cTime),
+		status: d.dealState,
+		adjudicationInfo:d.adjudicationInfo,
+		action:'handle'
+	})), [deals]);
 
 	const tableCol=[
 		{
-			Header: '交易ID',
-			accessor: 'firstName',
-			height:100
+			Header: 'ID',
+			accessor: 'dealID',
+			height:10,
+			width:30,
 		},
 		{
-			Header: '角色',
-			accessor: 'lastName',
+			Header: 'ROLE',
+			accessor: 'role',
+			width:50,
 		},
 		{
-			Header: '商品类型',
-			accessor: 'age',
+			Header: 'TOKEN',
+			accessor: 'coinType',
+			width:50,
 		},
 		{
-			Header: '货币类型',
-			accessor: 'visits',
+			Header: 'CURRENCY',
+			accessor: 'currencyType',
+			width:50,
 		},
 		{
-			Header: '成交价格',
-			accessor: 'status1',
+			Header: 'UNIT',
+			accessor: 'uint',
+			width:40,
 		},
 		{
-			Header: '成交数量',
-			accessor: 'status2',
+			Header: 'AMOUNT',
+			accessor: 'amount',
+			width:50,
 		},
 		{
-			Header: '剩余确认时间',
-			accessor: 'status3',
+			Header: 'FEE',
+			accessor: 'fee',
+			width:40,
 		},
 		{
-			Header: '状态',
+			Header:"PAYMENT",
+			accessor: 'payment',
+			width:80,
+		},
+		{
+			Header: 'Remaining Time',
+			accessor: 'remainingTime',
+			width:100,
+		},
+		{
+			Header: 'STATUS',
 			accessor: 'status',
+			width:80,
 		},
 		{
-			Header: '操作',
+			Header: 'ACTION',
 			accessor: 'action',
-			Cell: () => {
+			width:80,
+			Cell: ({row:{values:deal}}) => {
 				return (
 					<>
 						<div className="handleBtnGroup">
-							<div className="btn" onClick={handleBtnCLick}>确认</div>
-							<div className="btn disabledBtn" onClick={handleBtnCLick}>取消</div>
+						{deal.status === "Confirming" ? (walletAddress === deal.maker ? 
+						<div className="btn" onClick={()=>handleConfirmDeal(deal)}>Confirm</div>:
+						<div className="btn" onClick={()=>handleCancelDeal(deal)}>Cancel</div>
+						):<span>Noop</span>}
 						</div>
+					</>
+				)
+			},
+		},
+		{
+			Header: '',
+			accessor: 'detail',
+			width:80,
+			Cell: ({row:{values:deal}}) => {
+				return (
+					<>
 						<div className="handleBtnGroup">
-							<div className="btn disabledBtn" onClick={handleBtnCLick}>仲裁</div>
-							<div className="btn disabledBtn" onClick={handleBtnCLick}>辩护</div>
+							<div className="btn action" onClick={()=>handleBtnCLick(deal)}>More...</div>
 						</div>
 					</>
 				)
 			},
 		},
 	]
-	const handleBtnCLick=()=>{
-		router.push('/exchange/detail/456');
+
+	const confirmDealTxn = useSynthetixTxn(
+		"OTC",
+		'confirmDeal',
+		[dealID], 
+	{ gasPrice: GAS_PRICE.toBN(), gasLimit:GAS_LIMIT}
+	);
+
+	const cancelDealTxn = useSynthetixTxn(
+		"OTC",
+		'cancelDeal',
+		[dealID], 
+	{ gasPrice: GAS_PRICE.toBN(), gasLimit:GAS_LIMIT}
+	);
+
+	const handleConfirmDeal= (deal)=>{
+		setDealID(deal.dealID);
+		setActionState("confirm");
 	}
+
+	const handleCancelDeal= (deal)=>{
+		setDealID(deal.dealID);
+		setActionState("cancel");
+	}
+
+	const handleBtnCLick=(deal)=>{
+		router.push(`/exchange/detail/${deal.dealID}`);
+	}
+
+	useEffect(()=>{
+		if(actionState !== ""){
+			if (actionState == "confirm"){
+				confirmDealTxn.mutate();
+			} else {
+				cancelDealTxn.mutate();
+			}
+			setTxModalOpen(true);
+			setActionState("");
+		}
+	}, [dealID, actionState]);
+
+	useEffect(() => {
+		switch (confirmDealTxn.txnStatus) {
+			case 'unsent':
+				setTxModalOpen(false);
+				break;
+			case 'pending':
+				setTxModalOpen(true);
+				break;
+			case 'confirmed':
+				setTxModalOpen(false);
+				//router.push('/loans/list');
+				break;
+		}
+	}, [confirmDealTxn.txnStatus]);
+
+	useEffect(() => {
+		switch (cancelDealTxn.txnStatus) {
+			case 'unsent':
+				setTxModalOpen(false);
+				break;
+			case 'pending':
+				setTxModalOpen(true);
+				break;
+			case 'confirmed':
+				setTxModalOpen(false);
+				//router.push('/loans/list');
+				break;
+		}
+	}, [cancelDealTxn.txnStatus]);
 
 	// 角色下拉框
 	const roleOptions = [
-		{ label: '角色1', value: '1' },
-		{ label: '角色2', value: '2' },
-		{ label: '角色3', value: '3' },
+		{ label: 'Maker', value: '0' },
+		{ label: 'Taker', value: '1' },
 	]
 	// 商品类型
 	const productOptions = [
-		{ label: '商品1', value: '1' },
-		{ label: '商品2', value: '2' },
-		{ label: '商品3', value: '3' },
+		{ label: 'USDT', value: '0' },
+		{ label: 'USDC', value: '1' },
 	]
 	// 货币类型
 	const currencyOptions = [
-		{ label: '货币1', value: '1' },
-		{ label: '货币2', value: '2' },
-		{ label: '货币3', value: '3' },
+		{ label: 'CNY', value: '0' },
+		{ label: 'USD', value: '1' },
 	]	
 	// 交易状态
 	const delOptions = [
-		{ label: '交易1', value: '1' },
-		{ label: '交易2', value: '2' },
-		{ label: '交易3', value: '3' },
+		{ label: 'Confimming', value: '0' },
+		{ label: 'Cancelled', value: '1' },
+		{ label: 'Confirmed', value: '2' },
 	]
 
-	const value = '1'
 	return (
 		<>
 			<Head>
@@ -180,9 +262,10 @@ const Exchange: FC = () => {
 			</Head>
 
 			<Container>
+				{/*
 				<SelectWrap>
 					<SelectInput data-testid="select">
-						{/* <Select
+						{ <Select
 							inputId={`label-asset-options`}
 							formatOptionLabel={(option) => (
 								<Currency.Name currencyKey={option.label} showIcon={true} />
@@ -197,7 +280,7 @@ const Exchange: FC = () => {
 							}}
 							variant="outline"
 							isDisabled={false}
-						/> */}
+						/> }
 						<Select
 							variant="outline"
 							options={roleOptions}
@@ -224,26 +307,50 @@ const Exchange: FC = () => {
 						/>
 					</SelectInput>
 				</SelectWrap>
-				
+						*/}
 				<Styles>
 					<TableCom
 						palette="primary"
-						isLoading={false}
+						isLoading={dealQuery.isLoading}
 						{...{ columns:tableCol }}
 						data={data}
 						// noResultsMessage={noResultsMessage}
-						// showPagination={true}
+						showPagination={true}
 					/>
 				</Styles>
 				
 			</Container>
 
+			    {actionState === "confirm" && confirmDealTxn.errorMessage !== "" && <ErrorMessage>{confirmDealTxn.errorMessage}</ErrorMessage>}
+			    {actionState === "cancel" && cancelDealTxn.errorMessage !== "" && <ErrorMessage>{cancelDealTxn.errorMessage}</ErrorMessage>}
 
-			
+				{txModalOpen && actionState === "confirm" && (
+				<TxConfirmationModal
+					onDismiss={() => setTxModalOpen(false)}
+					txError={confirmDealTxn.errorMessage}
+					attemptRetry={confirmDealTxn.mutate}
+					content={
+						<TxModalContent/>
+					}
+				/>
+				)}
+
+				
+			{txModalOpen  &&  actionState === "cancel" && (
+				<TxConfirmationModal
+					onDismiss={() => setTxModalOpen(false)}
+					txError={cancelDealTxn.errorMessage}
+					attemptRetry={cancelDealTxn.mutate}
+					content={
+						<TxModalContent/>
+					}
+				/>
+				)}
 		</>
 	);
 };
 const Container=styled.div`
+	font-family: ${(props) => props.theme.fonts.condensedMedium};
 	background: #203298;
 	border-radius: 22px;
 `
@@ -266,7 +373,7 @@ const Styles = styled.div`
 			background: #192987;
 		}
 		tr {
-			height: 100px;
+			height: 50px;
 			:last-child {
 				td {
 					border-bottom: 0;
@@ -322,6 +429,17 @@ const Styles = styled.div`
 				color: #9195a3;
 			}
 		}
+		span{
+			color: gray
+		}
+		.action{
+			text-decoration:underline;
+			color:yellow;
+			&:hover{
+				color:red;
+			}
+
+		}
 	}
 	.table-body-row{
 		:last-child{
@@ -340,5 +458,6 @@ const SelectInput = styled.div`
 		border:1px solid #a5a5a5
 	}
 `;
+
 
 export default Exchange;

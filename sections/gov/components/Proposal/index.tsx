@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import { Grid, Col } from 'sections/gov/components/common';
 import Content from './Content';

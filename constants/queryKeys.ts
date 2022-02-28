@@ -4,6 +4,37 @@ import { SPACE_KEY } from 'constants/snapshot';
 import { Synths } from './currency';
 
 export const QUERY_KEYS = {
+	Otc:{
+		Orders:(networkId: NetworkId, isOpend: boolean)=>[
+			"orders",
+			networkId, 
+			isOpend,
+		],
+		Order:(networkId:NetworkId, account: string, isOpend: boolean)=>[
+			"order",
+			networkId, 
+			account,
+			isOpend,
+		],
+		Deals:(networkId: NetworkId, account: string)=>[
+			"deals",
+			networkId, 
+			account,
+		],
+		Profiles:(networkId: NetworkId)=>[
+			"profiles",
+			networkId
+		],
+		Profile:(networkId: NetworkId, account: string)=>[
+			"profile",
+			networkId,
+			account,
+		],
+		Evidence:(cid: string)=>[
+			"evidence",
+			cid,
+		],
+	},
 	Debt: {
 		WalletDebtData: (walletAddress: string, networkId: NetworkId) => [
 			'debt',

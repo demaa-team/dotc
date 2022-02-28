@@ -1,3 +1,4 @@
+// @ts-nocheck
 import styled from 'styled-components';
 import React, { FC, ReactNode, useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { Svg } from 'react-optimized-image';

@@ -81,7 +81,7 @@ export enum CryptoCurrency {
 	CRV = 'CRV',
 	DHT = 'DHT',
 	YVSNX = 'yvSNX',
-	SCN='sCN2111',
+	SCN='sCN',
 }
 
 export const FIAT_SYNTHS = new Set([

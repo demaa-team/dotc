@@ -1,77 +1,83 @@
-import React,{useMemo, useState} from 'react';
+// @ts-nocheck
+import React,{useMemo, useState, FC} from 'react';
 import styled from 'styled-components';
 import Img from 'react-optimized-image';
 import Button from 'components/Button';
 import Upload from 'rc-upload';
+import IconPlaceholder from 'public/images/deal/evidence.svg';
+import {ipfsRepo, defaultAvatar, ipfsEndPoint, GAS_LIMIT, GAS_PRICE, USDT_ADDRESS, getAvatar} from "queries/otc/subgraph/utils";
+import {create as ipfsApi} from 'ipfs-http-client';
 
-const Evidence=()=>{
+const ipfsClient = ipfsApi({url:ipfsEndPoint});
+
+type EvidenceProps = {
+index:number;
+onUpload:(index:number, cid:string)=>void;
+evidence:any;
+};
+
+const Evidence:FC<EvidenceProps> =({index, onUpload, evidence = IconPlaceholder})=>{
+
     const UploadProps={
-		action: () => {
-			return new Promise(resolve => {
-			  setTimeout(() => {
-				resolve('/upload.do');
-			  }, 2000);
-			});
+		type: 'drag',
+		action: async (file) => {
+			if(file){
+				try{
+					const ret = await ipfsClient.add(file);
+					if(ret){
+                        onUpload(index, ret.cid.toString());
+					}
+				}catch(_){
+
+				}
+			}
 		},
 		onStart(file:any) {
-			console.log('onStart', file, file.name);
 		},
 		onSuccess(ret:any) {
-			console.log('onSuccess', ret);
 		},
 		onError(err:any) {
-			console.log('onError', err);
 		},
 	}
     return (
         <Container>
-            <ImgWrapper>
-                <img className='img' src="http://m.imeitou.com/uploads/allimg/2016062920/ke4rrvvmx5g.jpg"/>
-            </ImgWrapper>
-
-
             <Upload {...UploadProps}>
-                <div style={{marginTop:'10px'}}>
-                    <Button variant="primary" size='sm'>
-                        <SubmitTxt width='160px'>提交证据</SubmitTxt>
-                    </Button>
-                </div>
+            <ImgWrapper>
+              <img src={evidence ===""?IconPlaceholder:getAvatar(evidence)}/>
+              <div>{index}</div>
+              </ImgWrapper>
             </Upload>
-            {/* <SubmitBtn>
-                提交证据
-            </SubmitBtn> */}
         </Container>
     )
 }
 const Container=styled.div`
-
+    display:flex;
+    justify-content: space-around;
+    align-items: center;
 `
 const ImgWrapper=styled.div`
+    border-style: dashed;
+    border-color: gray;
     width: 180px;
-    height: 120px;
-    background: #6D83FF;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .img{
-        width: 66px;
-        height: auto;
+    height: 180px;
+    position:relative;
+    &:hover{
+            cursor: pointer;
+        }
+    div{
+        color:yellow;
+        position: absolute;
+        text-align:center;
+        font-size: 120px;
+        top:0;
+        left:55px;
+    }
+    img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 `
 
-const SubmitTxt = styled.span`
-    display: inline-block;
-    width:${(props) => props.width};
-`
-
-const SubmitBtn=styled.div`
-    margin-top: 13px;
-    width: 180px;
-    height: 28px;
-    line-height: 28px;
-    text-align: center;
-    background: #6D83FF;
-    border-radius: 5px;
-`
 
 export default Evidence;

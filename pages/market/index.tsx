@@ -1,42 +1,57 @@
 import React, { useState, useEffect } from 'react';
+import { UseQueryResult } from 'react-query';
+
 import Head from 'next/head';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, constSelector } from 'recoil';
 import { useRouter } from 'next/router';
 import Pagination from 'components/Table/Pagination'
 import styled from 'styled-components';
 import WeiXinImg from 'public/images/market/weixin.png';
 import PayPalImg from 'public/images/market/paypal.png';
 import Img, { Svg } from 'react-optimized-image';
+import useOrderHistoryQuery from "queries/otc/subgraph/useOrderHistoryQuery";
+import useProfileHistoryQuery from "queries/otc/subgraph/useProfileHistoryQuery";
+import {Order, ProfileInfo, PayType} from "queries/otc/subgraph/types";
+import {ipfsRepo, defaultAvatar, ipfsEndPoint, getAvatar} from "queries/otc/subgraph/utils";
+import WechatIcon from 'assets/order/wechat.svg';
+import AliylipayIcon from 'assets/order/alipay.svg';
+import PaypalIcon from 'assets/order/paypal.svg';
+import VisaIcon from 'assets/order/visa.svg';
+import OtherIcon from 'assets/order/other.svg';
 
 const Market = () => {
 	const router = useRouter();
 	const { t } = useTranslation();
+	const profileHistoryQuery = useProfileHistoryQuery();
+	const data = profileHistoryQuery.isSuccess?profileHistoryQuery.data: [];
+
+	console.log(data)
 	const itemCardContentData=[
 		{
-			label:'剩余',
+			label:'remaining',
 			val:1000,
 			unit:'USDT'
 		},
 		{
-			label:'单价',
+			label:'price',
 			val:6.33,
-			unit:'元'
+			unit:'CNY'
 		},
 		{
-			label:'成交',
+			label:'volume',
 			val:250000,
 			unit:'USDT'
 		},
 		{
-			label:'用时',
+			label:'time cost',
 			val:10,
-			unit:'分钟'
+			unit:'MIN'
 		}
 	]
 
-	const handleJumpDetail=()=>{
-		router.push('/market/detail/123');
+	const handleJumpDetail=(account)=>{
+		router.push(`/market/detail/${account}`);
 	}
 
 	const [pageIndex,setPageIndex] = useState(0)
@@ -54,7 +69,6 @@ const Market = () => {
 	const nextPage=()=>{
 		setPageIndex(pageIndex+1)
 	}
-
 
 	useEffect(() => {
 		if(pageIndex===0){
@@ -76,37 +90,73 @@ const Market = () => {
 			</Head>
 			<Container>
 				{
-					[1,2,3,4,5,6].map(v=>
-						<ItemCard key={v}>
+					data.map(p=>(
+						<ItemCard key={p.account}>
 							<HeaderBox>
 								<div className="avatarBox">
-									<img className='avatar' src="https://pica.zhimg.com/80/v2-308d6eecb6bf60f53be0d6eeade0c734_720w.jpg?source=1940ef5c" alt="" />
+									<img className='avatar' src={getAvatar(p.avatar)} alt="" />
 								</div>
-								<div className="name">大掌柜</div>
-								<div className="desc">安全、放贷速度快</div>
+								<div className="name">{p.alias}</div>
+								<div className="desc">{p.ad}</div>
 							</HeaderBox>
 							<SplitLine/>
 							<ItemContent>
 								{
-									itemCardContentData.map((v,i)=>
-										<div className="row" key={i}>
+									itemCardContentData.map((v,i)=> {
+										if(0 == i ){
+											return	<div className="row" key={i}>
 											<div className="label">{v.label}</div>
-											<div className="val">{v.val}</div>
+											<div className="val">{p.order?.leftAmount??0}</div>
 											<div className="unit">{v.unit}</div>
 										</div>
+										} else if(1 == i){
+											return	<div className="row" key={i}>
+											<div className="label">{v.label}</div>
+											<div className="val">{p.order?.price??0}</div>
+											<div className="unit">{v.unit}</div>
+										</div>
+										} else if(2 == i) {
+											return	<div className="row" key={i}>
+											<div className="label">{v.label}</div>
+											<div className="val">{p.order?.volume??0}</div>
+											<div className="unit">{v.unit}</div>
+										</div>
+										} else if(3 == i) {
+											return	<div className="row" key={i}>
+											<div className="label">{v.label}</div>
+											<div className="val">{p.order?.leftAmount??0}</div>
+											<div className="unit">{v.unit}</div>
+										</div>
+										}
+									}
 									)
 								}
 								<div className="row">
-									<div className="label">支付</div>
+									<div className="label">Pay Methods</div>
 									<div className="payType">
-										<Img className='payImg' src={WeiXinImg}/>
-										<Img className='payImg' src={PayPalImg}/>
+										{
+											p.pays.map((v,i)=>{
+												if(v.type === 'wechat'){
+													return <Img className='payImg' src={WechatIcon}/>
+												} else if(v.type === 'alipay') {
+													return <Img className='payImg' src={AliylipayIcon}/>
+												}else if(v.type === 'paypal') {
+													return <Img className='payImg' src={PaypalIcon}/>
+												}else if(v.type === 'visa') {
+													return <Img className='payImg' src={VisaIcon}/>
+												} else {
+													return <Img className='payImg' src={OtherIcon}/>
+												}
+											})
+										
+										}
+									
 									</div>
 								</div>
-								<JumpBtn className='jumpBtn' onClick={handleJumpDetail}/>
+								<JumpBtn className='jumpBtn' onClick={()=>handleJumpDetail(p.account)}/>
 							</ItemContent>
 						</ItemCard>
-					)
+					))
 				}
 			</Container>
 			<PaginationBox>
@@ -125,6 +175,7 @@ const Market = () => {
 };
 
 const Container = styled.div`
+	font-family: ${(props) => props.theme.fonts.condensedMedium};
 	padding: 80px 10px;
 	/* display: flex;
     flex-wrap: wrap;
@@ -189,11 +240,14 @@ const HeaderBox=styled.div`
 		border-radius: 50%;
 	}
 	.name{
-		font-size: 18px;
+		//color:yellow;
+		font-size: 25px;
+		font-weight:bolder;
 		text-align: center;
 		margin-top: 20px;
 	}
 	.desc{
+		//color:yellow;
 		text-align: center;
 		margin-top: 22px;
 	}
@@ -218,6 +272,10 @@ const ItemContent=styled.div`
 		display: flex;
 		margin-bottom: 23px;
 		.label{
+			flex:1;
+			//color:gray;
+			font-weight: bold;
+			text-transform:uppercase;
 			&::before{
 				content:'';
 				display: inline-block;
@@ -227,32 +285,36 @@ const ItemContent=styled.div`
 				border-radius: 50%;
 				margin-right: 10px;
 			}
-			font-size: 20px;
+			font-size: 15px;
 		}
 		.val{
-			flex: 2;
-			width: 169px;
+			flex: 1;
+			width: 80px;
 			height: 35px;
+			font-weight: bolder;
 			line-height: 35px;
 			text-align:center;
+			color:red;
 			background: rgba(7, 20, 92, 0.54);
 			margin-left: 30px;
 		}
 		.unit{
 			flex: 1;
 			height: 35px;
+			padding-left: 20px;
 			line-height: 35px;
-			text-align: center;
+			text-align: left;
+			font-weight: bold;
+			//color:gray;
 		}
 		.payType{
+			flex:1;
 			height: 35px;
-			display: flex;
-			align-items: center;
-			margin-left: 30px;
+			//margin-left: 30px;
 			.payImg{
-				width: auto;
+				width: 27px;
 				height: 27px;
-				margin-right: 20px;
+				margin-right: 5px;
 			}
 		}
 	}

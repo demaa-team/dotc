@@ -1,4 +1,4 @@
-import React,{useEffect, useMemo,useRef, useState} from 'react';
+import React,{useEffect, useMemo,useRef, useState, FC} from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import { useRouter } from 'next/router';
@@ -11,29 +11,64 @@ import {
 } from 'styles/common';
 import Img, { Svg } from 'react-optimized-image';
 
-import WeiXinIcon from 'public/images/market/weixin-icon.png';
-import PaypalIcon from 'public/images/market/paypal-icon.png';
-import PhoneIcon from 'public/images/market/phone-icon.png';
+import PhoneIcon from 'assets/order/phone.svg';
+
+import WechatIcon from 'assets/order/wechat.svg';
+import AliylipayIcon from 'assets/order/alipay.svg';
+import PaypalIcon from 'assets/order/paypal.svg';
+import VisaIcon from 'assets/order/visa.svg';
+import OtherIcon from 'assets/order/other.svg';
+
+import WhatsappIcon from 'assets/order/whatsapp.svg';
+import LineIcon from 'assets/order/line.svg';
+import TgIcon from 'assets/order/telegram.svg';
 
 import CopyIcon from 'assets/svg/app/copy.svg';
 import CheckIcon from 'assets/svg/app/check.svg';
+import { isTypeSystemExtensionNode } from 'graphql';
+import {ProfileInfo}  from 'queries/otc/subgraph/types';
 
+type FooterCardProps ={
+    profile:ProfileInfo;
+};
 
-const FooterCard=()=>{
+const ShowIcon = ({type})=>{
+    if(type === 'wechat'){
+        return <Img className='icon' src={WechatIcon}/>;
+    } else if(type === 'alipay') {
+     return <Img className='icon' src={AliylipayIcon}/>;
+    }else if(type === 'paypal') {
+        return <Img className='icon' src={PaypalIcon}/>;
+    }else if(type === 'visa') {
+        return <Img className='icon' src={VisaIcon}/>;
+    } if(type === 'phone') {
+        return <Img className='icon' src={PhoneIcon}/>;
+    } else if(type === 'telegram'){
+        return <Img className='icon' src={TgIcon}/>;
+    }else if(type === 'whatsapp'){
+        return <Img className='icon' src={WhatsappIcon}/>;
+    }else if(type === 'line'){
+        return <Img className='icon' src={LineIcon}/>;
+    }else {
+     return <Img className='icon' src={OtherIcon}/>;
+    }  
+}
+
+const FooterCard:FC<FooterCardProps> = ({profile})=>{
     const {t}=useTranslation();
     const [telCopied,setTelCopied]=useState(false);
     const [wxCopied,setWxCopied]=useState(false);
     const [wxPayCopied,setWxPayCopied]=useState(false);
     const [paypalCopied,setPaypalCopied]=useState(false);
 
-
     return (
         <Container>
             <div className="itemBox">
-                <div className="title">联系方式</div>
-                <div className="row">
-                    <Img className='icon' src={PhoneIcon} />
-                    <div className="desc">+8612345678</div>
+                <div className="title">Contact Method</div>
+                {profile.contacts.map(item=>{
+              return  <div className="row">
+                    <ShowIcon type={item.type}/>
+                    <div className="desc">{item.address}</div>
                     <Tooltip
                         hideOnClick={false}
                         arrow={true}
@@ -44,140 +79,65 @@ const FooterCard=()=>{
                         }
                     >
                         <CopyClipboardContainer>
-                            <CopyToClipboard text={'+8612345678'} onCopy={() => setTelCopied(false)}>
+                            <CopyToClipboard text={item.address} onCopy={() => setTelCopied(false)}>
                             <Svg src={CopyIcon} />
-                                {/* {telCopied ? (
-                                    <Svg
-                                        src={CheckIcon}
-                                        width="16"
-                                        height="16"
-                                        viewBox={`0 0 ${CheckIcon.width} ${CheckIcon.height}`}
-                                    />
-                                ) : (
-                                    <Svg src={CopyIcon} />
-                                )} */}
                             </CopyToClipboard>
                         </CopyClipboardContainer>
                     </Tooltip>
-                </div>
-                <div className="row">
-                    <Img className='icon wx' src={WeiXinIcon}/>
-                    <div className="desc">+8612345678</div>
-
-                    <Tooltip
-                        hideOnClick={false}
-                        arrow={true}
-                        placement="bottom"
-                        content={t('modals.wallet.copy-address.copy-to-clipboard')}
-                        // content={
-                        //     wxCopied ? t('modals.wallet.copy-address.copied')
-                        //         : t('modals.wallet.copy-address.copy-to-clipboard')
-                        // }
-                    >
-                        <CopyClipboardContainer>
-                            <CopyToClipboard text={'+8612345678'} onCopy={() => setWxCopied(false)}>
-                            <Svg src={CopyIcon} />
-                                {/* {wxCopied ? (
-                                    <Svg
-                                        src={CheckIcon}
-                                        width="16"
-                                        height="16"
-                                        viewBox={`0 0 ${CheckIcon.width} ${CheckIcon.height}`}
-                                    />
-                                ) : (
-                                    <Svg src={CopyIcon} />
-                                )} */}
-                            </CopyToClipboard>
-                        </CopyClipboardContainer>
-                    </Tooltip>
-                </div>
+                </div>})}
             </div>
+
             <div className="itemBox">
-            <div className="title">支付方式</div>
+            <div className="title">Payment Method</div>
+            {profile.pays.map(item=>
                 <div className="row">
-                    <Img className='icon wx' src={WeiXinIcon} />
-                    <div className="desc">+86123456781</div>
+                    <ShowIcon type={item.type}/>
+                    <div className="desc">{item.address}</div>
                     <Tooltip
                         hideOnClick={false}
                         arrow={true}
                         placement="bottom"
                         content={
-                            // wxPayCopied ? t('modals.wallet.copy-address.copied')
-                            //     : t('modals.wallet.copy-address.copy-to-clipboard')
                             t('modals.wallet.copy-address.copy-to-clipboard')
                         }
                     >
                         <CopyClipboardContainer>
-                            <CopyToClipboard text={'+86123456781'} onCopy={() => setWxPayCopied(false)}>
-                                {/* {wxPayCopied ? (
-                                    <Svg
-                                        src={CheckIcon}
-                                        width="16"
-                                        height="16"
-                                        viewBox={`0 0 ${CheckIcon.width} ${CheckIcon.height}`}
-                                    />
-                                ) : (
-                                    <Svg src={CopyIcon} />
-                                )} */}
+                            <CopyToClipboard text={item.address} onCopy={() => setWxPayCopied(false)}>
                                 <Svg src={CopyIcon} />
                             </CopyToClipboard>
                         </CopyClipboardContainer>
                     </Tooltip>
-                </div>
-                <div className="row">
-                    <Img className='icon paypal' src={PaypalIcon}/>
-                    <div className="desc">+86123456781</div>
-                    <Tooltip
-                        hideOnClick={false}
-                        arrow={true}
-                        placement="bottom"
-                        content={
-                            paypalCopied ? t('modals.wallet.copy-address.copied')
-                                : t('modals.wallet.copy-address.copy-to-clipboard')
-                        }
-                    >
-                        <CopyClipboardContainer>
-                            <CopyToClipboard text={'+86123456781'} onCopy={() => setPaypalCopied(false)}>
-                            <Svg src={CopyIcon} />
-                                {/* {paypalCopied ? (
-                                    <Svg
-                                        src={CheckIcon}
-                                        width="16"
-                                        height="16"
-                                        viewBox={`0 0 ${CheckIcon.width} ${CheckIcon.height}`}
-                                    />
-                                ) : (
-                                    <Svg src={CopyIcon} />
-                                )} */}
-                            </CopyToClipboard>
-                        </CopyClipboardContainer>
-                    </Tooltip>
-                </div>
+                </div>)}
             </div>
         </Container>
     )
 }
 
 const Container=styled.div`
+
     width: 100%;
-    height: 210px;
+    //height: 210px;
     background: #203298;
     border-radius: 22px;
     display: flex;
     justify-content: space-between;
-    padding: 0 15vw;
+    padding: 2vw 15vw 2vw 15vw;
     margin-top: 27px;
+
     .itemBox{
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        justify-content: space-around;
+        align-items: flex-start;
         .title{
-            width: 124px;
+            //width: 124px;
+            color:silver;
+	        font-family: ${(props) => props.theme.fonts.condensedMedium};
+            text-transform: capitalize ;
             text-align: center;
             font-size: 22px;
             font-weight: 400;
-            color: #FFFFFF;
+            //color: #FFFFFF;
             padding: 6px 14px;
             border-bottom: 2px solid #5473E8;
         }
@@ -186,24 +146,18 @@ const Container=styled.div`
             margin-left: -60px;
             display: flex;
             align-items: center;
-        }
-        .icon{
-            width: 20px;
-            height: 20px;
-            &.wx{
-                width: 23px;
+            .icon{
+                width: 28px;
+                height: 28px;
             }
-            &.paypal{
-                width: 23px;
-                height: auto;
-            }
+            .desc{
+                margin-left: 30px;
+                font-size: 22px;
+                font-weight: bold;
+                color: #FFFFFF;
+            }  
         }
-        .desc{
-            margin-left: 30px;
-            font-size: 22px;
-            font-weight: bold;
-            color: #FFFFFF;
-        }
+    
     }
 `
 

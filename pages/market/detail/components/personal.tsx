@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React,{useEffect, useMemo, useState} from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
@@ -5,8 +6,69 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import castArray from 'lodash/castArray';
 import { create } from 'lodash';
+import {getAvatar} from "queries/otc/subgraph/utils";
 
-const Personal=()=>{
+import AdIcon from 'public/images/pending-order/ad.svg';
+import RemainingIcon from 'public/images/pending-order/remaining.svg';
+import AuthIcon from 'public/images/pending-order/auth.svg';
+import TimeCostIcon from 'public/images/pending-order/time.svg';
+
+
+
+const IconType =(props)=>{
+    if(props.labelType === 'auth') {
+        return  <img src={AuthIcon.src} ></img>
+    } else if(props.labelType === 'remaining') {
+        return  <img src={RemainingIcon.src} ></img>
+    } else if(props.labelType === 'time') {
+        return  <img src={TimeCostIcon.src} ></img>
+    }
+    else {
+        return  <img src={AdIcon.src} ></img>
+    }
+}
+
+const IconLabel =(props)=>{
+    return <IconLabelWrap>
+        <div className='label'>
+            <div className='icon'>
+                <IconType labelType='auth' {...props}/>
+            </div>
+            <div className='name'>{props.labelName}</div>
+        </div>
+        <div className='context'>{props.text}</div>
+    </IconLabelWrap>
+}
+
+const IconLabelWrap = styled.div`
+    height: 100%;
+    margin-top: 20px;
+   
+    .label{
+        display:flex;
+        align-items: start;
+        .icon{
+            margin-right: 15px;;
+        }
+        .name{
+            color: silver;
+            font-size: 20px;
+            text-transform: capitalize;
+            text-decoration:underline;
+        }
+    }
+    .context{
+        font-size: 15px;
+        margin-left: 47px;
+    }
+`
+
+const Personal=(props)=>{
+    let profile = props.profile;
+    if(profile == null){
+        return null;
+    }
+
     const [mr,setMr] = useState('50px')
     const [fn,setFn] = useState('58px')
     const [fu,setFu] = useState('24px')
@@ -15,9 +77,13 @@ const Personal=()=>{
         const num:number = Number(dom[0].clientWidth)/396
         setMr(String(num*50)+'px')
         setFn(String(num*58)+'px')
-        setFu(String(num*24)+'px')
+        setFu(String(num*10)+'px')
     }
-    window.onresize=resizeFn
+    /*
+    if(!!window){
+        window.onresize=resizeFn
+    }
+    */
     useEffect(()=>{
        resizeFn()
     })
@@ -25,29 +91,60 @@ const Personal=()=>{
         <Container>
             <div className='topBox' id='personal'>
                 <div className="leftBox">
-                    <div className="avatarWrap">
-                        <img className='avatar' src="https://pica.zhimg.com/80/v2-308d6eecb6bf60f53be0d6eeade0c734_720w.jpg?source=1940ef5c" alt="" />
+                    <div className='top'>
+                        <div className="avatarWrap">
+                            <img className='avatar' src={getAvatar(profile.avatar)} alt="" />
+                        </div>
+                        <div className="introBox">
+                        <div className='icon'></div>
+                        <div className="name">{profile.alias}</div>
                     </div>
-                    <div className="introBox">
-                        <div className="name">大掌柜</div>
                     </div>
+                    <IconLabel labelType='auth'  labelName='Name' text={profile.auth}/>
+                    <IconLabel labelType='remaining' labelName='Remainning'  text={profile?.order?.leftAmount??'0.00'}/>
+                    <IconLabel labelType='time' labelName='time cost'  text='0 min'/>
                 </div>
                 <div className="rightBox">
                     <div className="rbContent">
                         <MoneyBox mr={mr}>
-                            <Num fn={fn}>6.33</Num>
-                            <Unit fu={fu}>元/USDT</Unit>
+                            <Num fn={fn}>{profile?.order?.price??0}</Num>
+                            <Unit fu={fu}>{profile?.order?.currencyCode??""}/{profile?.order?.coinCode??""}</Unit>
                         </MoneyBox>
                     </div>
+                    <Adv>
+                        <div className='icon'>
+                            <img src={AdIcon.src}/>
+                        </div>
+                        <div className='ad'>{profile.ad} </div>
+                        </Adv>
                 </div>
             </div>
-            <div className="desc">安全、放贷速度快!安全、放款速度快！安全、放款速度快！安全、放款速度快！</div>
         </Container>
     )
 }
 
+const Adv = styled.div`
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin-top:32px;
+    .icon{
+        margin-bottom: 32px;
+    }
+    .ad{
+        text-align: center;
+        font-size: 20px;
+    }
+
+`
+
 const Container=styled.div`
-    height: 306px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 462px;
     background: #203298;
     border-radius: 22px;
     padding: 15px 26px 40px 40px;
@@ -57,39 +154,44 @@ const Container=styled.div`
     }
     .leftBox{
         display: flex;
-        flex-direction: column;
-        width: 30%;
+        width: 40%;
         margin-right: 13%;
-        justify-content: center;
-        align-items: center;
-        .avatarWrap{
-            width: 147px;
-            height: 147px;
+        flex-direction: column;
+        //justify-content: center;
+        .top{
             display: flex;
+            flex-direction: column;
+            //justify-content: center;
             align-items: center;
-            justify-content: center;
-            border: 2px dotted #49C8BA;
-            border-radius: 50%;
-            .avatar{
-                width: 135px;
-                height: 135px;
+            .avatarWrap{
+                width: 147px;
+                height: 147px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 2px dotted #49C8BA;
                 border-radius: 50%;
+                .avatar{
+                    width: 135px;
+                    height: 135px;
+                    border-radius: 50%;
+                }
             }
-        }
-        .introBox{
-            margin-top: 10px;
-            .name{
-                text-align: center;
-                color: #FFFFFF; 
-                font-size: 34px;
-                font-weight: bold;
+            .introBox{
+                margin-top: 10px;
+                .name{
+                    text-align: center;
+                    color: #FFFFFF; 
+                    font-size: 34px;
+                    font-weight: bold;
+                }
             }
         }
     }
     .rightBox{
         width:57%;
         height: 145px;
-        padding-top: 27px;
+        padding-top: 0px;
         .rbContent{
             background-image: url('/images/market/bg.png');
             height: 145px;
@@ -112,18 +214,23 @@ const Container=styled.div`
                 background-size: cover;
             }
         }
+        .desc{
+            font-size: 20px;
+            color: #D2D8F7;
+            font-weight: 400;
+            margin-top: 12px;
+            text-align: center;
+        }
     }
-    .desc{
-        font-size: 20px;
-        color: #D2D8F7;
-        font-weight: 400;
-        margin-top: 12px;
-    }
+`
+
+const Bottom = styled.div`
+    
 `
 
 const MoneyBox=styled.div`
     margin-right:${(props) => props.mr};
-    margin-top:-46px;
+    margin-top:0px;
     font-weight: bold;
     color: #FFFFFF;
 `

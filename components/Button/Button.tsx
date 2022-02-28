@@ -7,6 +7,7 @@ type ButtonProps = {
 	variant: 'primary' | 'orange' | 'secondary' | 'tertiary' | 'solid' | 'outline' | 'text' | 'green';
 	isActive?: boolean;
 	isRounded?: boolean;
+	isHidden?: boolean;
 };
 
 const Button = styled.button<ButtonProps>`
@@ -22,6 +23,7 @@ const Button = styled.button<ButtonProps>`
 	outline: none;
     color: ${(props) => props.theme.colors.white};
 	text-transform: capitalize;
+	visibility: ${(props)=> props.isHidden?"hidden":""};
 
   	&:disabled {
 		background: ${(props) => Color(props.theme.colors.blue).alpha(0.5).rgb().string()};

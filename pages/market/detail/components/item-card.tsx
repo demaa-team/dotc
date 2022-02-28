@@ -4,16 +4,25 @@ import { useRecoilValue } from 'recoil';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import castArray from 'lodash/castArray';
+
+interface ImageObject{
+    src:string
+}
+
+interface Data {
+    label:string,
+    val:string
+}
 interface PropsType{
-    icon:any,
-    list:any
+    icon:ImageObject,
+    list:Data[]
 }
 
 const ItemCard:React.FC<PropsType>=({icon,list})=>{
 
     return (
         <Container>
-            <LeftBox style={{backgroundImage:`url(${icon.src})`}}></LeftBox>
+            <LeftBox  ImageUrl={icon.src}></LeftBox>
             <RightBox>
                 {
                     list.map((v:any)=>
@@ -42,9 +51,10 @@ const Container=styled.div`
     }
 `
 
-const LeftBox=styled.div`
+const LeftBox=styled.div<{ImageUrl}>`
     width: 48px;
     height: 48px;
+    background-image: url(ImageUrl);
     background-size: 100%;
     background-repeat: no-repeat;
 `

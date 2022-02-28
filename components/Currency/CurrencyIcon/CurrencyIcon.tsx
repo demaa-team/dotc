@@ -28,7 +28,13 @@ type CurrencyIconProps = {
 };
 export const SNXIcon =require('../../../assets/wallet-icons/SNX.png');
 
-export const SCNIcon =require('../../../assets/svg/currencies/crypto/SCN2111.png');
+export const SCNIcon =require('../../../assets/svg/currencies/crypto/SCN.png');
+export const USDIcon =require('../../../assets/svg/currencies/fiat/USD.svg');
+export const CNYIcon =require('../../../assets/svg/currencies/fiat/CNY.svg');
+export const USDTIcon =require('../../../assets/svg/currencies/crypto/USDT.svg');
+
+
+
 
 export const getSynthIcon = (currencyKey: CurrencyKey) =>
 	`https://raw.githubusercontent.com/Synthetixio/synthetix-assets/master/synths/${currencyKey}.svg`;
@@ -88,6 +94,18 @@ export const CurrencyIcon: FC<CurrencyIconProps> = ({
 			}
 			case CryptoCurrency.SCN: {
 				return <img src={SCNIcon} {...props} alt="scn-icon"/>;
+			}
+			case "USDT": {
+				return <img src={USDTIcon} {...props} alt="usdt-icon"/>;
+			}
+			case "USD": {
+				return <img src={USDIcon} {...props} alt="usd-icon"/>;
+			}
+			case "CNY":{
+				return <img src={CNYIcon} {...props} alt="cny-icon"/>;
+			}
+			case "WETH":{
+				return <Img src={ETHIcon} {...props} />;
 			}
 			default:
 				return (

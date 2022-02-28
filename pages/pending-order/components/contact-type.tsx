@@ -9,18 +9,19 @@ import Img, { Svg } from 'react-optimized-image';
 
 import UIContainer from 'containers/UI';
 
-import WhatsappIcon from 'assets/order/whatsapp.png';
-import LineIcon from 'assets/order/line.png';
-import PhoneIcon from 'assets/order/phone.png';
-import TgIcon from 'assets/order/telegram.png';
-import OtherIcon from 'assets/order/other.png';
-
+import WhatsappIcon from 'assets/order/whatsapp.svg';
+import LineIcon from 'assets/order/line.svg';
+import PhoneIcon from 'assets/order/phone.svg';
+import TgIcon from 'assets/order/telegram.svg';
+import OtherIcon from 'assets/order/other.svg';
+import { setSeconds } from 'date-fns';
+import {ContactIno} from 'queries/otc/subgraph/types';
 
 interface PropsType {
     label: string,
     onInputChange: (v: string, i: number) => void,
     onSelectChange: (v: any, i: number) => void,
-    list: any,
+    list: ContactIno[],
     onAdd: () => void,
     onRemove: (i: number) => void,
 }
@@ -44,17 +45,44 @@ const ContactType: FC<PropsType> = ({ list, label, onInputChange, onSelectChange
     const { t } = useTranslation();
     const options = [
         { 
-            value: 'whatsapp', label: 'whatsapp'
+            value: 'whatsapp', label: 'Whatsapp'
         },{
-            value: 'phone', label: 'phone'
+            value: 'phone', label: 'Phone'
         },{
-            value: 'line', label: 'line'
+            value: 'line', label: 'Line'
         },{
-            value: 'telegram', label: 'telegram'
+            value: 'telegram', label: 'Telegram'
         },{
-            value: 'other', label: 'other'
+            value: 'other', label: 'Other'
         }
     ]
+    const ids = {
+        "whatsapp":{ 
+            value: 'whatsapp', label: 'Whatsapp'
+        },
+        "phone":{
+            value: 'phone', label: 'Phone'
+        },
+        "line":{
+            value: 'line', label: 'Line'
+        },
+        "telegram":{
+            value: 'telegram', label: 'Telegram'
+        },
+        "other":{
+            value: 'other', label: 'Other'
+        }
+    };
+    const set = new Set();
+    list.forEach(e=>{
+        if(e.type !== ""){
+         set.add(e.type)
+         }
+    });
+    const optionList = [];
+    list.forEach((e,i) => {
+        optionList[i] = options.filter(o=>  (o.value === e.type || !set.has(o.value)));
+    });
     return (
         <Wrapper>
             <div className="label">{label}</div>
@@ -63,21 +91,21 @@ const ContactType: FC<PropsType> = ({ list, label, onInputChange, onSelectChange
                     <RowWrap key={index}>
                         <Select
                             variant="outline"
-                            value={v.select}
+                            value={ids[v.type]}
                             formatOptionLabel={(option) => (
                                 <OptionLabel {...option}/>
                             )}
-                            options={options}
+                            options={optionList[index]}
                             className='select'
                             onChange={(e) => onSelectChange(e, index)}
                         ></Select>
-                        <TextInput value={v.input} placeholder='请输入' onChange={(e) => onInputChange(e.target.value, index)} className='input'></TextInput>
+                        <TextInput value={v.address} placeholder='' onChange={(e) => onInputChange(e.target.value, index)} className='input'></TextInput>
                         <RemoveBtn onClick={() => onRemove(index)} isForbid={list.length === 1}></RemoveBtn>
                     </RowWrap>
                 )
             }
-            <Button variant="primary" size='xl'  onClick={onAdd}>
-                <SubmitTxt width='100%'>+</SubmitTxt>
+            <Button variant="text" size='xl'  isHidden={list.length >= 5} onClick={onAdd}>
+                <SubmitTxt>More...</SubmitTxt>
             </Button>
         </Wrapper>
     );
@@ -105,7 +133,7 @@ const Wrapper = styled.div`
         color: #DADDF7;
         margin-bottom: 8px;
         margin-left: 15px;
-        &::after{
+        /*&::after{
             content: '';
             display: inline-block;
             width: 12px;
@@ -114,6 +142,7 @@ const Wrapper = styled.div`
             background: url('/images/pending-order/require-icon.png') no-repeat center;
             background-size: 100%;
         }
+        */
     }
     .select{
         flex: 1;
@@ -164,7 +193,8 @@ const RemoveBtn = styled.div<{ isForbid?: boolean }>`
 
 const SubmitTxt = styled.span`
     display: inline-block;
-    width:${(props) => props.width};;
+    width: 100%;
+    font-size: 15px;
 `
 
 const IncreaseBtn = styled.div`

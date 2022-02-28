@@ -33,13 +33,13 @@ export const useUserStakingData = (walletAddress: string | null) => {
 			Synths.sUSD
 		);
 		const previousFeePeriod = useGetFeePoolDataQuery(1);
-		const {
-			currentCRatio,
-			targetCRatio,
-			debtBalance,
-			collateral,
-			targetThreshold,
-		} = {};
+
+		const currentCRatio = wei(0);
+		const targetCRatio  = wei(0);
+		const debtBalance = wei(0);
+		const collateral = wei(0);
+		const targetThreshold  = wei(0);
+	
 		const globalStakingInfo = useGlobalStakingInfoQuery();
 		const debtData = useGetDebtDataQuery(walletAddress);
 		const feesToDistribute = previousFeePeriod?.data?.feesToDistribute ?? wei(0);

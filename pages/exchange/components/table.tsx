@@ -1,5 +1,12 @@
-import { useTable } from 'react-table'
-const Table = ({ columns, data }) => {
+import { useTable, useFlexLayout, useSortBy, Column, Row, usePagination, Cell } from 'react-table';
+import React, { FC } from 'react';
+
+type TableProps = {
+	data: object[];
+	columns: Column<object>[];
+};
+
+const Table:FC<TableProps> = ({ columns, data }) => {
     const {
         getTableProps,
         getTableBodyProps,

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React,{useEffect, useMemo,useState,FC} from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
@@ -26,9 +27,9 @@ const Pledge:FC<PropsType>=({onSelectChange})=>{
     const [showModal,setShowModal]=useState(false);
     const [countDown,setCountDown]=useState(TIME);
     const [isCounting,setIsCounting]=useState(false);
-    const [maxNum,setMaxNum]=useState();
+    const [maxNum,setMaxNum]=useState<number>();
     const [requestData,setRequestData]=useState({tel:'',code:''});
-    const [selectVal,setSelectVal]=useState('')
+    const [selectVal,setSelectVal]=useState({label:'', value:''})
     const handleVerify=()=>{
         setShowModal(true);
     }
@@ -38,7 +39,7 @@ const Pledge:FC<PropsType>=({onSelectChange})=>{
     }
 
     const fixMaxNum=()=>{
-        setMaxNum('1000')
+        setMaxNum(1000)
     }
 
     const handleChange=(key:string,val:any)=>{
@@ -77,13 +78,9 @@ const Pledge:FC<PropsType>=({onSelectChange})=>{
     },[])
     return (
         <Container>
-            <div className="maxBox">
-                <Input onChange={(e)=>changeMaxNum(e)} value={maxNum} placeholder='最小XXX'></Input>
-                <div className="allowBtn" onClick={fixMaxNum}>最大值</div>
-            </div>
-            <div className="loan">
-                <div className="help">
-                    <Tooltip
+            <div>
+                <div className="info">
+                <Tooltip
                         arrow={true}
                         placement="top"
                         content={ t('modals.market.pledge-tool-tip')}
@@ -92,30 +89,30 @@ const Pledge:FC<PropsType>=({onSelectChange})=>{
                         <Img className='questionIcon' src={HelpIcon}/>
                         </CopyClipboardContainer>
                     </Tooltip>
-                    {/* <PledgeInfoTooltip
-                        arrow={true}
-                        content={
-                            <Trans
-                                i18nKey="debt.actions.hedge.info.tooltip"
-                                components={[<Strong />]}
-                            ></Trans>
-                        }
-                    >
-                        <Img className='questionIcon' src={HelpIcon}/>
-                    </PledgeInfoTooltip> */}
-                    <div className="txt">抵押:</div>
+                <div className="des">
+                    You should provide collateral for the transaction
                 </div>
+                </div>
+                <div className="tips" onClick={handleVerify}>
+                    没有抵押物？通过验证获取一次无抵押交易资格。
+                </div>
+            </div>
+            <div className="maxBox">
                 <div className="selectBox">
                     <SelectComponent>
                         <Select variant="solid" value={selectVal} options={options} className='select' onChange={(e)=>selectChange(e)}></Select>
                         {/* <PriceCurrencySelect/> */}
                     </SelectComponent>
-                    <div className="allowBtn">批准</div>
                 </div>
+                <Input onChange={(e)=>changeMaxNum(e)} value={maxNum} placeholder='最小50'></Input>
+                <div className="allowBtn" onClick={fixMaxNum}>Max</div>
             </div>
-            <div className="tips" onClick={handleVerify}>
-                没有抵押物？通过验证获取一次无抵押交易资格。
-            </div>
+            <BtnBox>
+				<Button variant="primary" size='xl'>
+					<SubmitTxt>Approve transfer collateral</SubmitTxt>
+				</Button>
+			</BtnBox>
+        
 
             {/* <BaseModal title="测试" onDismiss={()=>setShowModal(false)} isOpen={showModal}>
 
@@ -152,6 +149,12 @@ const StyledBaseModal = styled(BaseModal)`
 		background-color: ${(props) => props.theme.colors.navy};
 	} */
 `;
+
+const BtnBox=styled.div`
+    margin-top: 30px;    
+	width: 100%;
+	text-align: center;
+`
 
 const ModalContent=styled.div`
     position: relative;
@@ -196,24 +199,45 @@ const Container=styled.div`
     background: #203298;
     border-radius: 22px;
     padding: 44px 38px 50px 38px;
+    .info{
+        display: flex;
+        .questionIcon{
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+    }
+    .des{
+        margin-bottom: 10px;
+        text-align: center;
+        font-size: 20px;
+    }
+    .tips{
+        margin-bottom: 30px;
+        text-align: center;
+        font-size: 15px;
+        font-weight: 400;
+        text-decoration: underline;
+        color: #F76A2D;
+        cursor: pointer;
+        &:hover{
+            color: #5473E8;
+        }
+    }
     .maxBox{
         display: flex;
         height: 60px;
-        
-        .val{
-            /* width: 437px; */
-            flex: 1;
-            height: 100%;
+        .selectBox{
+            height:60px;
             line-height: 60px;
-            padding: 0 40px;
-            background: #1A2479;
-            font-size: 20px;
-            font-weight: 400;
-            color: #FFFFFF;
+            pad-left:10px;
+            flex: 1;
+            border-radius: 10px;
+            display: flex;
         }
 
         .allowBtn{
-            width: 22.5%;
+            width: 20%;
             height: 100%;
             line-height: 60px;
             text-align: center;
@@ -225,7 +249,7 @@ const Container=styled.div`
             cursor: pointer;
         }
         input{
-            width:77.5%;
+            width 50%;
             height:60px;
             background-color: #1A2479;
         }
@@ -243,49 +267,15 @@ const Container=styled.div`
             border-radius: 10px;
             padding: 0 16px;
             margin-right: 1.3%;
-            .questionIcon{
-                width: 28px;
-                height: 28px;
-                margin-right: 10px;
-            }
+     
             .txt{
                 font-size: 20px;
                 font-weight: 400;
                 color: #FFFFFF;
             }
         }
-        .selectBox{
-            margin-left: 10px;
-            flex: 1;
-            border-radius: 10px;
-            display: flex;
-            .allowBtn{
-                width: 32.5%;
-                height: 100%;
-                line-height: 60px;
-                text-align: center;
-                background: #5473E8;
-                border-radius: 0px 10px 10px 0px;
-                font-size: 24px;
-                font-weight: bold;
-                color: #FFFFFF;
-                cursor: pointer;
-            }
-        }
+    
     }
-    .tips{
-        margin-top: 30px;
-        text-align: center;
-        font-size: 20px;
-        font-weight: 400;
-        text-decoration: underline;
-        color: #F76A2D;
-        cursor: pointer;
-        &:hover{
-            color: #5473E8;
-        }
-    }
-
 `
 
 const SelectComponent=styled.div`

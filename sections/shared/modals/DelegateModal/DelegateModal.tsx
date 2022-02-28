@@ -19,8 +19,11 @@ const DelegateModal: FC<DelegateModalProps> = ({ onDismiss }) => {
 	const { t } = useTranslation();
 
 	const walletAddress = useRecoilValue(walletAddressState);
-
+	// TODO
+	console.log(walletAddress)
 	const { useGetAuthoriserWallets } = useSynthetixQueries();
+	// TODO
+	console.log(useGetAuthoriserWallets)
 	const delegateWalletsQuery = useGetAuthoriserWallets(walletAddress);
 
 	const [delegateWallet, setDelegateWallet] = useRecoilState(delegateWalletState);
@@ -28,6 +31,7 @@ const DelegateModal: FC<DelegateModalProps> = ({ onDismiss }) => {
 	const authoriserWallets = delegateWalletsQuery?.data ?? null;
 
 	const handleWalletSelect = (wallet: DelegationWallet) => {
+		console.log('11111',wallet)
 		setDelegateWallet(wallet);
 		onDismiss();
 	};

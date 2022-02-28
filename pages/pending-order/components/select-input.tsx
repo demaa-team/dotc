@@ -2,7 +2,7 @@ import React,{ FC, useEffect, useState } from 'react';
 import Head from 'next/head';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import TextInput from 'components/Input/TextInput';
+import NumericInput  from 'components/Input/NumericInput';
 import Select from 'components/Select';
 import Currency from 'components/Currency';
 
@@ -19,8 +19,9 @@ interface PropsType {
     selectVal: any,
     onSelectChange: (n: string, e: any) => void,
     name: string
+    isDisabled?: boolean;
 }
-const SelectInput: FC<PropsType> = ({ name, label, inputVal, selectVal, options, onInputChange, onSelectChange }) => {
+const SelectInput: FC<PropsType> = ({ name, label, inputVal, selectVal, options, onInputChange, onSelectChange, isDisabled = false }) => {
     const { t } = useTranslation();
     return (
         <Wrapper>
@@ -35,8 +36,9 @@ const SelectInput: FC<PropsType> = ({ name, label, inputVal, selectVal, options,
                     options={options} 
                     className='select' 
                     onChange={(e) => onSelectChange(name, e)}
+                    isDisabled
                 ></Select>
-                <TextInput value={inputVal} placeholder='请输入' onChange={(e) => onInputChange(name, e.target.value)} className='input'></TextInput>
+                <NumericInput value={inputVal} placeholder='0.00' onChange={(e) => onInputChange(name, e.target.value)} className='input'></NumericInput>
             </RowWrap>
 
 
@@ -55,6 +57,7 @@ const Wrapper = styled.div`
         color: #DADDF7;
         margin-bottom: 8px;
         margin-left: 15px;
+        /*
         &::after{
             content: '';
             display: inline-block;
@@ -63,7 +66,7 @@ const Wrapper = styled.div`
             margin-left: 6px;
             background: url('/images/pending-order/require-icon.png') no-repeat center;
             background-size: 100%;
-        }
+        }*/
     }
     .select{
         min-width: 120px;
